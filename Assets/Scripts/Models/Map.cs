@@ -1,54 +1,42 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 
 namespace LittleFarmGame.Models
 {
-     public sealed class NewBehaviourScript : BaseObjectScene
+    public sealed class Map : BaseObjectScene
     {
-
-        #region PrivateData
-
-        //enums, struct in this class
-
-        #endregion
 
 
         #region Fields
 
-        private FarmCell[,] _cells;
-
-        //[Header("Example"), Tooltip("Example")]
-        //[HiddenInInspector]
-        //[SerializeField]
-        //[SPACE]
-
-        #endregion
-
-
-        #region Properties
-
-        //
+        private List<FarmCell> _farmCells;
 
         #endregion
 
 
         #region Methods
 
-        public void FillCell(FarmCell cell)
+        public void FillMap(List<FarmCell> farmCells)
         {
+            _farmCells = farmCells;
 
+            foreach (var farmCell in _farmCells)
+                FillCell(farmCell);
         }
 
-        public void ClearCell(FarmCell cell)
+        private void FillCell(FarmCell farmCell)
         {
+            var newCell = ResourcesObjectPresenter.CellPrefub;
+            newCell.IsBought = farmCell.IsBought;
+            newCell.IsBusy = farmCell.IsBusy;
+            newCell.MapPositionX = farmCell.MapPositionX;
+            newCell.MapPositionZ = farmCell.MapPositionZ;
 
+            var position = new Vector3(farmCell.MapPositionX, 0, farmCell.MapPositionZ);
+            var cellObj = Instantiate(newCell.gameObject, position, Quaternion.identity);
+            cellObj.transform.SetParent(transform);
         }
-
-        //public void MoveCell(FarmCell movingCell, FarmCell newCell)
-        //{
-
-        //}
 
         #endregion
 

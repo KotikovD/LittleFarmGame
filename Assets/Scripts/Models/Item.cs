@@ -1,5 +1,8 @@
-﻿namespace LittleFarmGame.Models
+﻿
+
+namespace LittleFarmGame.Models
 {
+
      public abstract class Item : BaseObjectScene
     {
         protected float _priceCos;
