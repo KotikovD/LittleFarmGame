@@ -22,6 +22,7 @@ namespace LittleFarmGame.Controllers
         {
             SceneObjectPresenter.InitializeScene();
             ResourcesObjectPresenter.InitializeResources();
+            ItemsManager.BuildItems();
 
             mapController = new MapController();
             mapController.Initialization();

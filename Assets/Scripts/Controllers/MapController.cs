@@ -12,13 +12,39 @@ namespace LittleFarmGame.Controllers
 
             List<FarmCell> _farmCells = new List<FarmCell>();
 
-            for (int i = 0; i < 5; i++)
+            // for tests
+            for (int x = 0; x <= 9; x++)
             {
-               _farmCells.Add(new FarmCell(false, true, i, i));
+                for (int z = 0; z <= 9; z++)
+                {
+                    var fc = new FarmCell();
+                    if (x == 5 && z == 5)
+                    {
+                        fc = new FarmCell();
+                        fc.SetFarmCell(false, true, x, z, FarmType.Cow);
+                        _farmCells.Add(fc);
+                        continue;
+                    }
+
+                    if (x <= 1 || z <= 1 || x >= 8 || z >= 8)
+                    {
+                        fc = new FarmCell();
+                        fc.SetFarmCell(false, true, x, z, FarmType.None);
+                    }
+                    else
+                    {
+                        
+                        fc.SetFarmCell(false, true, x, z, FarmType.None);
+                    }
+                        _farmCells.Add(fc);
+
+                    
+                }
+
             }
-            _farmCells.Add(new FarmCell(false, true, 0, 5));
-            _farmCells.Add(new FarmCell(false, false, 1, 2));
-            _farmCells.Add(new FarmCell(false, false, 1, 3));
+
+
+
 
             SceneObjectPresenter.Map.FillMap(_farmCells);
         }
