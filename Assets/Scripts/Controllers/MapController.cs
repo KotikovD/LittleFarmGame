@@ -9,34 +9,37 @@ namespace LittleFarmGame.Controllers
 
         public void Initialization()
         {
-
+            // for tests TODO get info from json
             List<FarmCell> _farmCells = new List<FarmCell>();
 
-            // for tests
-            for (int x = 0; x <= 9; x++)
+            for (int x = 0; x <= 7; x++)
             {
-                for (int z = 0; z <= 9; z++)
+                for (int z = 0; z <= 7; z++)
                 {
-                    var fc = new FarmCell();
-                    if (x == 5 && z == 5)
-                    {
-                        fc = new FarmCell();
-                        fc.SetFarmCell(false, true, x, z, FarmType.Cow);
-                        _farmCells.Add(fc);
-                        continue;
-                    }
+                    FarmCell fc;
 
-                    if (x <= 1 || z <= 1 || x >= 8 || z >= 8)
+                    if (x == 2  && z == 2)
                     {
-                        fc = new FarmCell();
-                        fc.SetFarmCell(false, true, x, z, FarmType.None);
+                        fc = new FarmCell(false, true, x, z, FarmType.Cow);
+                    }
+                    else if (x == 2 && z == 5)
+                    {
+                        fc = new FarmCell(false, true, x, z, FarmType.Chicken);
+                    }
+                    else if (x == 4 && z == 4)
+                    {
+                        fc = new FarmCell(false, true, x, z, FarmType.Wheat);
+                    }
+                    else if (x <= 1 || z <= 1 || x >= 6 || z >= 6)
+                    {
+                        fc = new FarmCell(false, false, x, z, FarmType.None);
                     }
                     else
                     {
-                        
-                        fc.SetFarmCell(false, true, x, z, FarmType.None);
+                        fc = new FarmCell(false, true, x, z, FarmType.None);
                     }
-                        _farmCells.Add(fc);
+
+                    _farmCells.Add(fc);
 
                     
                 }
@@ -46,7 +49,7 @@ namespace LittleFarmGame.Controllers
 
 
 
-            SceneObjectPresenter.Map.FillMap(_farmCells);
+            SceneManager.Map.FillMap(_farmCells);
         }
     }
 }

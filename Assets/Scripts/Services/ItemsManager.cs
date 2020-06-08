@@ -12,7 +12,7 @@ namespace LittleFarmGame.Models
         private static GameObject ItemsManagerParent = new GameObject { name = StringManager.ItemsManagerName };
 
 
-        public static void BuildItems()
+        public static void BuildItemsPool()
         {
             BuildFarmResources();
             BuildFarm();
@@ -20,8 +20,8 @@ namespace LittleFarmGame.Models
 
         private static void BuildFarm()
         {
-            var farmDataArray = ResourcesObjectPresenter.FarmDataArray;
-            var farmPrefub = ResourcesObjectPresenter.FarmPrefub;
+            var farmDataArray = GameResourcesPresenter.FarmDataArray;
+            var farmPrefub = GameResourcesPresenter.FarmPrefub;
 
             foreach (var data in farmDataArray)
             {
@@ -40,8 +40,8 @@ namespace LittleFarmGame.Models
 
         private static void BuildFarmResources()
         {
-            var farmResourceDataArray = ResourcesObjectPresenter.FarmResourceDataArray;
-            var farmResourcePrefub = ResourcesObjectPresenter.FarmResourcePrefub;
+            var farmResourceDataArray = GameResourcesPresenter.FarmResourceDataArray;
+            var farmResourcePrefub = GameResourcesPresenter.FarmResourcePrefub;
 
             foreach (var data in farmResourceDataArray)
             {
@@ -66,7 +66,7 @@ namespace LittleFarmGame.Models
                 {
                     var newGameObject = Instantiate(farm.Value) as GameObject;
                     var newFarmRes = newGameObject.GetComponent<Farm>();
-                    newGameObject.transform.SetParent(SceneObjectPresenter.FarmItemsParent);
+                    newGameObject.transform.SetParent(SceneManager.FarmItemsParent);
                     newFarmRes.SwitchOn();
                     return newGameObject;
                 }       

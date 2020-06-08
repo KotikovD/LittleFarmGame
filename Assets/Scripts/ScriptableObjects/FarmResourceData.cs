@@ -15,15 +15,14 @@ namespace LittleFarmGame.Models
         public Sprite Image;
         public float BuyPrice;
         public float SellPrice;
-        [Tooltip("The number the player has available of these resource")]
-        public int CurrentCount;
 
         //FarmResource
         public ResourceType ResourceType;
+        public int PlayerCollected;
         public float FeedWeight;
 
         #endregion
 
-
+        
     }
 }

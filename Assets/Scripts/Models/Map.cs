@@ -10,7 +10,9 @@ namespace LittleFarmGame.Models
 
         #region Fields
 
-        private List<FarmCell> _farmCells;
+        public static List<GameObject> InstantiatedFarmCells = new List<GameObject>();
+
+        private List<FarmCell> _farmCellsData;
 
         #endregion
 
@@ -19,17 +21,17 @@ namespace LittleFarmGame.Models
 
         public void FillMap(List<FarmCell> farmCells)
         {
-            _farmCells = farmCells;
+            _farmCellsData = farmCells;
 
-            foreach (var farmCell in _farmCells)
+            foreach (var farmCell in _farmCellsData)
                 FillCell(farmCell);
 
-            transform.position = PlaceMapToCenter(_farmCells);
+            transform.position = PlaceMapToCenter(_farmCellsData);
         }
 
         private void FillCell(FarmCell farmCell)
         {
-            var newCell = ResourcesObjectPresenter.CellPrefub;
+            var newCell = GameResourcesPresenter.CellPrefub;
             newCell.IsBought = farmCell.IsBought;
             newCell.IsBusy = farmCell.IsBusy;
             newCell.MapPositionX = farmCell.MapPositionX;
@@ -39,12 +41,13 @@ namespace LittleFarmGame.Models
             var position = new Vector3(farmCell.MapPositionX, 0, farmCell.MapPositionZ);
             var cellObj = Instantiate(newCell.gameObject, position, Quaternion.identity) as GameObject;
             cellObj.transform.SetParent(transform);
+            InstantiatedFarmCells.Add(cellObj);
         }
 
         private Vector3 PlaceMapToCenter(List<FarmCell> farmCells)
         {
-            int maxX = 0;
-            int maxZ = 0;
+            float maxX = 0f;
+            float maxZ = 0f;
 
             foreach (var farmCell in farmCells)
             {
@@ -52,7 +55,7 @@ namespace LittleFarmGame.Models
                 if (farmCell.MapPositionX > maxZ) maxZ = farmCell.MapPositionZ;
             }
 
-            var newPosition = new Vector3(maxX / 2, 0, maxZ / 2) * -1;
+            var newPosition = new Vector3(maxX / 2, 0f, maxZ / 2) * -1;
             return newPosition;
         }
 

@@ -9,7 +9,7 @@ namespace LittleFarmGame.Models
 
         #region Fields
 
-        [SerializeField] protected string _name;
+        [HideInInspector] public string Name;
 
         #endregion
 
@@ -25,12 +25,6 @@ namespace LittleFarmGame.Models
         {
             gameObject.SetActive(false);
         }
-
-        //public void SaveData()
-        //{
-        //    if (GetComponent<ISerializable>() != null)
-        //        Object.FindObjectOfType<SerializableObjects>().PrefubsForSave.Add(gameObject);
-        //}
 
         #endregion
 

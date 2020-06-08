@@ -7,28 +7,32 @@ namespace LittleFarmGame.Models
     public sealed class FarmResource : Item
     {
 
-        [SerializeField] private ResourceType _resourceType;
-        [SerializeField] private float _feedWeight;
+        public ResourceType ResourceType;
+        public float FeedWeight;
+        public int PlayerCollected;
+        private Image _cellImage;
 
+        private void Awake()
+        {
+            _cellImage = gameObject.GetComponent<Image>();
+        }
 
         public void SetFarmResource(FarmResourceData data)
         {
-            _name = data.name;
-            _image = data.Image;
-            _sellPrice = data.SellPrice;
-            _buyPrice = data.BuyPrice;
-            _currentCount = data.CurrentCount;
-            _resourceType = data.ResourceType;
-            _feedWeight = data.FeedWeight;
-
-            var image = gameObject.GetComponent<Image>();
-            image.sprite = _image;
+            Name = data.ResourceName;
+            PlayerCollected = data.PlayerCollected;
+            Image = data.Image;
+            SellPrice = data.SellPrice;
+            BuyPrice = data.BuyPrice;
+            ResourceType = data.ResourceType;
+            FeedWeight = data.FeedWeight;
+            _cellImage.sprite = Image;
         }
 
 
         public void CollectResource()
         {
-
+            //TODO
         }
 
     }

@@ -15,8 +15,6 @@ namespace LittleFarmGame.Models
         public Sprite Image;
         public float BuyPrice;
         public float SellPrice;
-        [Tooltip("The number the player has available of these resource")]
-        public int CurrentCount;
 
         //Farm
         public FarmType FarmType;

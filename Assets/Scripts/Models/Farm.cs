@@ -32,22 +32,19 @@ namespace LittleFarmGame.Models
 
         public void SetFarm(FarmData data)
         {
-            _name = data.name;
-            _image = data.Image;
-            _sellPrice = data.SellPrice;
-            _buyPrice = data.BuyPrice;
-            _currentCount = data.CurrentCount;
+            Name = data.ResourceName;
+            Image = data.Image;
+            SellPrice = data.SellPrice;
+            BuyPrice = data.BuyPrice;
             _eatType = data.EatType;
             _produceType = data.ProduceType;
             _timeToCollect = data.TimeToCollect;
             _collectWeight = data.CollectWeight;
             _timeReserveEveryFeed = data.TimeReserveEveryFeed;
-
-            var image = gameObject.GetComponent<Image>();
-            image.sprite = _image;
+            
+            var image = gameObject.GetComponentInChildren<Image>();
+            image.sprite = Image;
         }
-
-
 
         private IEnumerator ProduceResource()
         {

@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3fd64690ef11b497f8b4cb62fd0b3972, type: 3}
+  m_Name: Chicken
+  m_EditorClassIdentifier: 
+  ResourceName: "\u041A\u0443\u0440\u0438\u0446\u0430"
+  Image: {fileID: 21300000, guid: b69e929f8082d4393bd9fbdef74d4785, type: 3}
+  BuyPrice: 18
+  SellPrice: 15
+  FarmType: 2
+  EatType: 3
+  ProduceType: 2
+  TimeToCollect: 10
+  CollectWeight: 1
+  TimeReserveEveryFeed: 10

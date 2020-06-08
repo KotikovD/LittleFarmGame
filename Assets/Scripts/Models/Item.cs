@@ -6,10 +6,9 @@ namespace LittleFarmGame.Models
 
      public abstract class Item : BaseObjectScene
     {
-        [SerializeField] protected Sprite _image;
-        [SerializeField] protected float _sellPrice;
-        [SerializeField] protected float _buyPrice;
-        [SerializeField] protected int _currentCount;
+        public Sprite Image;
+        public float SellPrice;
+       public float BuyPrice;
         
 
         virtual public void Sell()

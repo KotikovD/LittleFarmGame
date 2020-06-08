@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ResourceName: "\u041F\u0448\u0435\u043D\u0438\u0446\u0430"
   Image: {fileID: 21300000, guid: 7617ba776d5344c55aa02b7699550bdd, type: 3}
-  BuyPrice: 20
-  SellPrice: 15
+  BuyPrice: 12
+  SellPrice: 10
   CurrentCount: 0
   FarmType: 3
   EatType: 0

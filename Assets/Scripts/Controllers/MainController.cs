@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using LittleFarmGame.Models;
-
+using LittleFarmGame.UI;
 
 namespace LittleFarmGame.Controllers
 {
@@ -11,7 +11,9 @@ namespace LittleFarmGame.Controllers
 
         #region Fields
 
-        public MapController mapController;
+        public MapController MapController;
+        public FarmCellController FarmCellController;
+        public InventoryController InventoryController;
 
         #endregion
 
@@ -20,19 +22,22 @@ namespace LittleFarmGame.Controllers
 
         private void Start()
         {
-            SceneObjectPresenter.InitializeScene();
-            ResourcesObjectPresenter.InitializeResources();
-            ItemsManager.BuildItems();
+            GameResourcesPresenter.InitializeResources();
+            SceneManager.BuildScene();
+            ItemsManager.BuildItemsPool();
+            
+            MapController = new MapController();
+            MapController.Initialization();
 
-            mapController = new MapController();
-            mapController.Initialization();
+            FarmCellController = new FarmCellController();
+            FarmCellController.Initialization();
+
+            InventoryController = new InventoryController();
+            InventoryController.Initialization();
+
+            SceneManager.BuildUI();
+
         }
-
-        private void Update()
-        {
-
-        }
-
 
         #endregion
 
