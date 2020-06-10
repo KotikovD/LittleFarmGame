@@ -12,8 +12,8 @@ namespace LittleFarmGame.UI
 
         #region Fields
 
-        public event Action SellItem;
-        public event Action BuyItem;
+        public event Action<InventoryCellUI> SellItem;
+        public event Action<InventoryCellUI> BuyItem;
 
         public TextMeshProUGUI ItemName;
         public TextMeshProUGUI CurrentCount;
@@ -22,33 +22,37 @@ namespace LittleFarmGame.UI
         public Image ItemIcon;
         public Button SellButton;
         public Button BuyButton;
+        public ResourceType ResourceType = ResourceType.None;
+        public FarmType FarmType = FarmType.None;
 
         #endregion
-
+        
 
         #region UnityMethods
 
         public void SetData(FarmResource valueData)
         {
+            ResourceType = valueData.ResourceType;
             ItemName.text = valueData.Name;
             ItemIcon.sprite = valueData.Image;
             CurrentCount.text = valueData.PlayerCollected.ToString();
-            BuyButtonText.text = string.Concat(StringManager.BuyButton, valueData.BuyPrice);
-            SellButtonText.text = string.Concat(StringManager.SellButton, valueData.SellPrice);
+            BuyButtonText.text = string.Concat("-", valueData.BuyPrice, Environment.NewLine, StringManager.BuyButton);
+            SellButtonText.text = string.Concat("+", valueData.SellPrice, Environment.NewLine, StringManager.SellButton);
             SellButton.gameObject.SetActive(true);
             CurrentCount.gameObject.SetActive(true);
-            BuyButton.onClick.AddListener(() => SellItem?.Invoke());
-            SellButton.onClick.AddListener(() => BuyItem?.Invoke());
+            BuyButton.onClick.AddListener(() => SellItem?.Invoke(this));
+            SellButton.onClick.AddListener(() => BuyItem?.Invoke(this));
         }
 
         public void SetData(Farm valueData)
         {
             ItemName.text = valueData.Name;
+            FarmType = valueData.FarmType;
             ItemIcon.sprite = valueData.Image;
-            BuyButtonText.text = string.Concat(StringManager.BuyButton, valueData.BuyPrice);
+            BuyButtonText.text = string.Concat("-", valueData.BuyPrice, Environment.NewLine, StringManager.BuyButton);
             SellButton.gameObject.SetActive(false);
             CurrentCount.gameObject.SetActive(false);
-            BuyButton.onClick.AddListener(() => BuyItem?.Invoke());
+            BuyButton.onClick.AddListener(() => BuyItem?.Invoke(this));
         }
 
         #endregion

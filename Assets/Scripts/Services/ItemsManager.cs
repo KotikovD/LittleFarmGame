@@ -6,77 +6,68 @@ namespace LittleFarmGame.Models
 {
     public class ItemsManager : MonoBehaviour
     {
-        public static Dictionary<ResourceType, GameObject> FarmResources = new Dictionary<ResourceType, GameObject>();
-        public static Dictionary<FarmType, GameObject> Farms = new Dictionary<FarmType, GameObject>();
 
-        private static GameObject ItemsManagerParent = new GameObject { name = StringManager.ItemsManagerName };
 
+        #region Fileds
+
+        public static Dictionary<ResourceType, FarmResource> FarmResources = new Dictionary<ResourceType, FarmResource>();
+        public static Dictionary<FarmType, Farm> Farms = new Dictionary<FarmType, Farm>();
+
+       // private static GameObject ItemsManagerParent = new GameObject { name = StringManager.ItemsManagerName };
+
+        #endregion
+
+
+        #region Methods
 
         public static void BuildItemsPool()
         {
-            BuildFarmResources();
+            BuildFarmResourcesDictionary();
             BuildFarm();
         }
 
         private static void BuildFarm()
         {
             var farmDataArray = GameResourcesPresenter.FarmDataArray;
-            var farmPrefub = GameResourcesPresenter.FarmPrefub;
 
             foreach (var data in farmDataArray)
             {
-                var newInstance = Instantiate(farmPrefub);
-                var newFarm = newInstance.GetComponent<Farm>();
-                if (newFarm == null)
-                    newFarm = newInstance.AddComponent<Farm>();
-                newFarm.SetFarm(data);
- 
-                newFarm.SwitchOff();
-                newInstance.transform.SetParent(ItemsManagerParent.transform);
-                Farms.Add(data.FarmType, newInstance);
+                Farm newFarm = new Farm(data);
+                Farms.Add(data.FarmType, newFarm);
             }
         }
 
-
-        private static void BuildFarmResources()
+        private static void BuildFarmResourcesDictionary()
         {
             var farmResourceDataArray = GameResourcesPresenter.FarmResourceDataArray;
-            var farmResourcePrefub = GameResourcesPresenter.FarmResourcePrefub;
 
             foreach (var data in farmResourceDataArray)
             {
-                var newInstance = Instantiate(farmResourcePrefub);
-                var newFarmRes = newInstance.GetComponent<FarmResource>();
-                if (newFarmRes == null)
-                    newFarmRes = newInstance.AddComponent<FarmResource>();
-                newFarmRes.SetFarmResource(data);
-
-                newFarmRes.SwitchOff();
-                newInstance.transform.SetParent(ItemsManagerParent.transform);
-                FarmResources.Add(data.ResourceType, newInstance);
+                var newFarmRes = new FarmResource(data);
+                FarmResources.Add(data.ResourceType, newFarmRes);
             }
         }
 
-
-        public static GameObject GetFarm(FarmType farmType)
-        {
-            foreach (var farm in Farms)
-            {
-                if (farmType == farm.Key)
-                {
-                    var newGameObject = Instantiate(farm.Value) as GameObject;
-                    var newFarmRes = newGameObject.GetComponent<Farm>();
-                    newGameObject.transform.SetParent(SceneManager.FarmItemsParent);
-                    newFarmRes.SwitchOn();
-                    return newGameObject;
-                }       
-            }
-            return null;
-        }
-
-        //public GameObject GetFarmResource()
+        //public static GameObject GetFarm(FarmType farmType)
         //{
+        //    var farmPrefub = GameResourcesPresenter.FarmPrefub;
 
+        //    foreach (var farm in Farms)
+        //    {
+        //        if (farmType == farm.Key)
+        //        {
+        //            var newGameObject = Instantiate(farmPrefub, SceneManager.FarmItemsParent) as GameObject;
+        //            var newFarm = newGameObject.GetComponent<Farm>();
+        //            Debug.Log(farm.Value.BuyPrice);
+        //            newFarm.SetFarm(farm.Value); // не работает, кажется TODO
+        //            var newFarmImage = newGameObject.GetComponentInChildren<Image>();
+        //            newFarmImage.sprite = farm.Value.Image;
+        //            return newGameObject;
+        //        }
+        //    }
+        //    return null;
         //}
+
+        #endregion
     }
 }

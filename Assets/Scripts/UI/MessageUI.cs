@@ -23,7 +23,7 @@ namespace LittleFarmGame.UI
         private void Awake()
         {
             _messageText = GetComponentInChildren<TextMeshProUGUI>();
-            SceneManager.PlayerInventory.CantBuy += ShowMessage;
+            SceneManager.PlayerInventory.ImpossibleAction += ShowMessage;
             SwitchOff();
         }
 

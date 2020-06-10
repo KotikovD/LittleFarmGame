@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0e9ba7e54aa3498684c157c89597802, type: 3}
   m_Name: Milk
   m_EditorClassIdentifier: 
+  Id: 2
   ResourceName: "\u041C\u043E\u043B\u043E\u043A\u043E"
-  Image: {fileID: 21300000, guid: b22c80c1daf3a40e0a1e99183db67fbb, type: 3}
-  BuyPrice: 15
-  SellPrice: 12
-  CurrentCount: 3
+  Image: {fileID: 21300000, guid: c690f280b3cfe4839b901ccde3b45ba1, type: 3}
+  BuyPrice: 20
+  SellPrice: 15
   ResourceType: 1
   FeedWeight: 1

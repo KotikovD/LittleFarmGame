@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0e9ba7e54aa3498684c157c89597802, type: 3}
   m_Name: Egg
   m_EditorClassIdentifier: 
+  Id: 1
   ResourceName: "\u042F\u0439\u0446\u043E"
-  Image: {fileID: 21300000, guid: f18bddc8a9c904353915a38fb0347fa5, type: 3}
-  BuyPrice: 10
-  SellPrice: 5
-  CurrentCount: 0
+  Image: {fileID: 21300000, guid: 922bfacd1dba34d378d707b1b8e26d4d, type: 3}
+  BuyPrice: 15
+  SellPrice: 10
   ResourceType: 2
   FeedWeight: 1

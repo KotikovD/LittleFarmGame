@@ -25,8 +25,8 @@
         public static string FarmResourceDataPath = "Data/" + FarmResourceDataFolder;
 
         //Farm
-        public static string FarmName = "Farm";
-        public static string FarmPath = "Models/Items/" + FarmName;
+       // public static string FarmName = "Farm";
+       // public static string FarmPath = "Models/Items/" + FarmName;
         public static string FarmDataFolder = "FarmData";
         public static string FarmDataPath = "Data/" + FarmDataFolder;
 
@@ -34,11 +34,15 @@
         public static string InventoryUIPath = "Models/UI/Inventory";
         public static string MessageUIPath = "Models/UI/MessageUI";
         public static string InventoryCellUIPath = "Models/UI/InventoryCellUI";
-        public static string CoinsUIPath = "Models/UI/GameBarUI";
+        public static string GameBarUIPath = "Models/UI/GameBarUI";
+        public static string FarmCellUIPath = "Models/UI/FarmCellUI";
+        public static string GameMenuUIPath = "Models/UI/GameMenuUI";
 
         // UI text
+        public static string Menu = "MENU";
         public static string CantBuy = "Недостаточно монеток";
-        public static string SellButton = "Sell +";
-        public static string BuyButton = "Buy -";
+        public static string NeedMoreResource = "Нужно больше корма";
+        public static string SellButton = "SELL";
+        public static string BuyButton = "BUY";
     }
 }

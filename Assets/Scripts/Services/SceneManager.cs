@@ -1,18 +1,32 @@
-﻿using UnityEngine;
+﻿using LittleFarmGame.UI;
+using UnityEngine;
 using UnityEngine.UI;
 
 
 namespace LittleFarmGame.Models
 {
+    /// <summary>
+    /// Build scene objects and keep references
+    /// </summary>
     public class SceneManager : MonoBehaviour
     {
+
+        #region Fileds
 
         public static Map Map;
         public static Transform FarmItemsParent;
         public static Inventory PlayerInventory;
         public static Transform InventoryContent;
         public static GameObject Canvas;
-        //public static CoinsUI CoinsUI;
+        public static GameBarUI GameBarUI;
+        public static GameObject MessageUI;
+        public static GameObject FarmCellUI;
+        public static GameMenuUI GameMenuUI;
+
+        #endregion
+
+
+        #region SaticMethods
 
         public static void BuildScene()
         {
@@ -22,26 +36,24 @@ namespace LittleFarmGame.Models
             var farmItemsParent = new GameObject { name = StringManager.FarmItemsParentName };
             farmItemsParent.transform.SetParent(map.transform);
             FarmItemsParent = farmItemsParent.transform;
-            Canvas = GameObject.Find(StringManager.CanvasName);
-            // var inventory = new GameObject { name = StringManager.InventoryName };
+
             PlayerInventory = GameObject.FindObjectOfType<Inventory>();
             InventoryContent = PlayerInventory.transform.GetComponentInChildren<GridLayoutGroup>().transform;
 
-            // TODO PlayerInventory = GameObject.Find(StringManager.InventoryName).GetComponent<Inventory>();
-            //InventoryContent = GameObject.Find(StringManager.InventoryContentFolderName).transform;
+            Canvas = GameObject.Find(StringManager.CanvasName);
             
         }
 
-
         public static void BuildUI()
         {
-            // var pose = GameResourcesPresenter.InventoryUI.GetComponent<RectTransform>();
-            // var inventoryUI = Instantiate(GameResourcesPresenter.InventoryUI, SceneManager.Canvas.transform);
-            //// inventoryUI.transform.SetParent(SceneManager.Canvas.transform);
-
-            // var pose = GameResourcesPresenter.MessageUI.GetComponent<RectTransform>();
-            Instantiate(GameResourcesPresenter.MessageUI, SceneManager.Canvas.transform);
-            Instantiate(GameResourcesPresenter.CoinsUI, SceneManager.Canvas.transform);
+            GameMenuUI = Instantiate(GameResourcesPresenter.GameMenuUI);
+            MessageUI = Instantiate(GameResourcesPresenter.MessageUI, SceneManager.Canvas.transform);
+            GameBarUI = Instantiate(GameResourcesPresenter.GameBarUI, SceneManager.Canvas.transform);
+            FarmCellUI = Instantiate(GameResourcesPresenter.FarmCellUI, SceneManager.Canvas.transform);
         }
+
+        #endregion
+
+
     }
 }

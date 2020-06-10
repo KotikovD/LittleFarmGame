@@ -10,7 +10,7 @@ namespace LittleFarmGame.Models
 
         #region Fields
 
-        public static List<GameObject> InstantiatedFarmCells = new List<GameObject>();
+        public static List<FarmCell> InstantiatedFarmCells = new List<FarmCell>();
 
         private List<FarmCell> _farmCellsData;
 
@@ -32,16 +32,19 @@ namespace LittleFarmGame.Models
         private void FillCell(FarmCell farmCell)
         {
             var newCell = GameResourcesPresenter.CellPrefub;
-            newCell.IsBought = farmCell.IsBought;
-            newCell.IsBusy = farmCell.IsBusy;
-            newCell.MapPositionX = farmCell.MapPositionX;
-            newCell.MapPositionZ = farmCell.MapPositionZ;
-            newCell.FarmItem = farmCell.FarmItem;
+            newCell.SetFarmCell(farmCell);
+            //newCell.IsBought = farmCell.IsBought;
+            //newCell.IsBusy = farmCell.IsBusy;
+            //newCell.MapPositionX = farmCell.MapPositionX;
+            //newCell.MapPositionZ = farmCell.MapPositionZ;
+            //newCell.FarmItemType = farmCell.FarmItemType;
+            //newCell.CellBuyPrice = farmCell.CellBuyPrice;
 
             var position = new Vector3(farmCell.MapPositionX, 0, farmCell.MapPositionZ);
             var cellObj = Instantiate(newCell.gameObject, position, Quaternion.identity) as GameObject;
             cellObj.transform.SetParent(transform);
-            InstantiatedFarmCells.Add(cellObj);
+            
+            InstantiatedFarmCells.Add(cellObj.GetComponent<FarmCell>());
         }
 
         private Vector3 PlaceMapToCenter(List<FarmCell> farmCells)

@@ -11,18 +11,18 @@ namespace LittleFarmGame.Models
 
         [Header("Farm Data")]
         //Item
+        public int Id;
         public string ResourceName;
         public Sprite Image;
-        public float BuyPrice;
-        public float SellPrice;
+        public int BuyPrice;
+        public int SellPrice;
 
         //Farm
         public FarmType FarmType;
         public ResourceType EatType;
         public ResourceType ProduceType;
         public float TimeToCollect;
-        public float CollectWeight;
-        public float TimeReserveEveryFeed;
+        public int CollectWeight;
 
         #endregion
 

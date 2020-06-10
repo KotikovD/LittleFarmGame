@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fd64690ef11b497f8b4cb62fd0b3972, type: 3}
   m_Name: Cow
   m_EditorClassIdentifier: Assembly-CSharp:LittleFarmGame.Models:FarmData
+  Id: 2
   ResourceName: "\u041A\u043E\u0440\u043E\u0432\u0430"
   Image: {fileID: 21300000, guid: 3902930fb73b74d9993d61b61ea4aee2, type: 3}
-  BuyPrice: 25
-  SellPrice: 15
-  CurrentCount: 0
+  BuyPrice: 20
+  SellPrice: 10
   FarmType: 1
   EatType: 3
   ProduceType: 1
-  TimeToCollect: 20
+  TimeToCollect: 5
   CollectWeight: 1
   TimeReserveEveryFeed: 20

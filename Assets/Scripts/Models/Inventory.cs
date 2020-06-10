@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using LittleFarmGame.UI;
 
 
 namespace LittleFarmGame.Models
@@ -11,33 +12,26 @@ namespace LittleFarmGame.Models
         #region Fileds
 
         public event Action<int> CoinsHasChanged;
-        public event Action<string> CantBuy;
+        public event Action<string> ImpossibleAction;
 
-        //для сохранения данных
+        private Dictionary<ResourceType, InventoryCellUI> _iventoryResourceCells = new Dictionary<ResourceType, InventoryCellUI>();
+
+        /// <summary>
+        /// Keeps player saves data resources and count of each. Serilizable.
+        /// </summary>
         private Dictionary<ResourceType, int> _palyerInventory = new Dictionary<ResourceType, int>();
+        /// <summary>
+        /// Keeps player saves data coins count. Serilizable.
+        /// </summary>
         private int _coins;
 
+
+
         #endregion
-
-
-        #region Properties
 
         public int Coins { get => _coins; }
 
-        #endregion
-        //TODO remove
-        //private void FixedUpdate()
-        //{
-        //    if (Input.GetKeyDown(KeyCode.DownArrow))
-        //        CorrectCoins(10);
-
-        //    if (Input.GetKeyDown(KeyCode.UpArrow))
-        //        CorrectCoins(-30);
-        //}
-
         #region Methods
-
-
 
         public void BuildInventory(Dictionary<ResourceType, int> DataPalyerInventory, int coins)
         {
@@ -46,7 +40,7 @@ namespace LittleFarmGame.Models
 
             foreach (var item in ItemsManager.FarmResources)
             {
-                var itemData = item.Value.GetComponent<FarmResource>();
+                var itemData = item.Value;
 
                 foreach (var playerData in DataPalyerInventory)
                     if (itemData.ResourceType == playerData.Key)
@@ -57,8 +51,7 @@ namespace LittleFarmGame.Models
 
             foreach (var item in ItemsManager.Farms)
             {
-                var itemData = item.Value.GetComponent<Farm>();
-                CreateInventoryCell(itemData);
+                CreateInventoryCell(item.Value);
             }
         }
 
@@ -70,16 +63,16 @@ namespace LittleFarmGame.Models
             {
                 var valueData = value as FarmResource;
                 newCell.SetData(valueData);
-              // TODO  newCell.SellButton.onClick.AddListener(()=> CoinsHasChanged?.Invoke(_coins));
-             // newCell.BuyItem +=
+                newCell.SellButton.onClick.AddListener(() => SellFarmResource(newCell));
+                newCell.BuyButton.onClick.AddListener(() => BuyFarmResource(newCell));
+                _iventoryResourceCells.Add(valueData.ResourceType, newCell);
             }
             else if (value.GetType().Equals(typeof(Farm)))
             {
                 var valueData = value as Farm;
                 newCell.SetData(valueData);
+                newCell.BuyButton.onClick.AddListener(() => ActiveChoseModeOnCells(valueData.BuyPrice, valueData.FarmType));
             }
-
-            
         }
 
         private void SetCoins(int value)
@@ -90,20 +83,119 @@ namespace LittleFarmGame.Models
 
         public void CorrectCoins(int value)
         {
-            var newCoins = _coins += value;
-            if (newCoins > 0)
+            CorrectCoins(value, false);
+        }
+
+        public bool CorrectCoins(int value, bool justCheck)
+        {
+            var newCoins = _coins + value;
+            if (newCoins >= 0)
             {
-                _coins = newCoins;
-                CoinsHasChanged?.Invoke(_coins);
+                if (!justCheck)
+                {
+                    _coins = newCoins;
+                    CoinsHasChanged?.Invoke(_coins);
+                }
+                return true;
             }
             else
-                CantBuy?.Invoke(StringManager.CantBuy);
+            {
+                ImpossibleAction?.Invoke(StringManager.CantBuy);
+                return false;
+            }
         }
 
         public void CorrectInvenoryItem(ResourceType type, int value)
         {
             if (type == ResourceType.None) return;
             _palyerInventory[type] += value;
+        }
+
+        private void SellFarmResource(InventoryCellUI inventoryCell)
+        {
+            var farmRes = ItemsManager.FarmResources[inventoryCell.ResourceType];
+            var currentCount = _palyerInventory[inventoryCell.ResourceType];
+            if (currentCount > 0)
+            {
+                CorrectCoins(farmRes.SellPrice, false);
+                currentCount -= 1;
+                _palyerInventory[inventoryCell.ResourceType] = currentCount;
+                inventoryCell.CurrentCount.text = currentCount.ToString();
+            }
+        }
+
+        private void BuyFarmResource(InventoryCellUI inventoryCell)
+        {
+            var farmRes = ItemsManager.FarmResources[inventoryCell.ResourceType];
+            if (CorrectCoins(farmRes.BuyPrice * -1, false))
+            {
+                var currentCount = _palyerInventory[inventoryCell.ResourceType] += 1;
+                inventoryCell.CurrentCount.text = currentCount.ToString();
+            }
+        }
+
+        public void BuyCell(FarmCell farmCell)
+        {
+            if (CorrectCoins(farmCell.CellBuyPrice * -1, false))
+                farmCell.BuyThisCell();
+        }
+
+        public void SpendFarmResource(Farm farmData)
+        {
+            if (farmData.EatType == ResourceType.None)
+            {
+                farmData.ReloadProduce();
+            }
+            else
+            {
+                var farmRes = _palyerInventory[farmData.EatType];
+                if (farmRes > 0)
+                {
+                    farmData.ReloadProduce();
+                    farmRes = _palyerInventory[farmData.EatType] -= 1;
+                    _iventoryResourceCells[farmData.EatType].CurrentCount.text = farmRes.ToString();
+                }
+                else
+                {
+                    farmData.CantFeed();
+                    ImpossibleAction?.Invoke(StringManager.NeedMoreResource);
+                }
+            }
+        }
+
+        public void CollectFarmResource(Farm farmData)
+        {
+            var farmRes = _palyerInventory[farmData.ProduceType] += farmData.CollectWeight;
+            _iventoryResourceCells[farmData.ProduceType].CurrentCount.text = farmRes.ToString();
+        }
+
+
+        //убрать эти три метода из инвенторя  TODO
+        public void ActiveChoseModeOnCells(int buyPrice, FarmType farmType)
+        {
+            if (!CorrectCoins(buyPrice * -1, true)) return;
+            SetChoseModeOnCells(true, buyPrice, farmType);
+
+        }
+
+        public void SetChoseModeOnCells()
+        {
+            SetChoseModeOnCells(false);
+        }
+
+        public void SetChoseModeOnCells(bool setValue, int buyPrice = 0, FarmType farmType = FarmType.None)
+        {
+            foreach (var cell in Map.InstantiatedFarmCells)
+            {
+                if (cell.IsBought && !cell.IsBusy)
+                {
+                    cell.ActiveWaitingToChoose(setValue, buyPrice, farmType);
+                    if (setValue)
+                        cell.IAmTheChosen += SetChoseModeOnCells;
+                    else
+                        cell.IAmTheChosen -= SetChoseModeOnCells;
+                }
+            }
         }
 
         #endregion

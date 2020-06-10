@@ -1,65 +1,85 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 
 namespace LittleFarmGame.Models
 {
     public sealed class Farm : Item
     {
+        public bool IsFed;
+        public bool ReadyToCollect;
+        public bool IsProducing;
+        public ResourceType EatType;
+        public ResourceType ProduceType;
+        public float TimeToCollect;
+        public int CollectWeight;
+        public Image ProduceBar;
+        public FarmType FarmType;
+        // private FarmType _farmType;
 
-        FarmType _farmType;
-        ResourceType _eatType;
-        ResourceType _produceType;
-        float _timeToCollect;
-        float _collectWeight;
-        float _timeReserveEveryFeed;
 
-        private float _timeCounter = 0;
-        private bool _isFed = true;
-
-
-        public float EatingProgress
-        {
-            get { return _timeReserveEveryFeed / _timeCounter; } //TODO тут подругому отдается параметр
-        }
-
-        private void ActiveProduce()
-        {
-            if (_isFed)
-                StartCoroutine(ProduceResource());
-        }
-
-        public void SetFarm(FarmData data)
+        public Farm(FarmData data)
         {
             Name = data.ResourceName;
             Image = data.Image;
+            FarmType = data.FarmType;
             SellPrice = data.SellPrice;
             BuyPrice = data.BuyPrice;
-            _eatType = data.EatType;
-            _produceType = data.ProduceType;
-            _timeToCollect = data.TimeToCollect;
-            _collectWeight = data.CollectWeight;
-            _timeReserveEveryFeed = data.TimeReserveEveryFeed;
-            
-            var image = gameObject.GetComponentInChildren<Image>();
-            image.sprite = Image;
+            EatType = data.EatType;
+            ProduceType = data.ProduceType;
+            TimeToCollect = data.TimeToCollect;
+            CollectWeight = data.CollectWeight;
         }
 
-        private IEnumerator ProduceResource()
+        public void SetFarmData(Farm data)
         {
-            yield return new WaitForSeconds(1f);
-            _timeCounter++;
-            if (_timeCounter >= _timeReserveEveryFeed)
+            Name = data.Name;
+            Image = data.Image;
+            SellPrice = data.SellPrice;
+            BuyPrice = data.BuyPrice;
+            EatType = data.EatType;
+            ProduceType = data.ProduceType;
+            TimeToCollect = data.TimeToCollect;
+            CollectWeight = data.CollectWeight;
+            IsFed = true;
+            IsProducing = false;
+            ReadyToCollect = false;
+        }
+
+        public void StartProduce()
+        {
+            if (!IsFed) return;
+            StopCoroutine(ProducingResource());
+            StartCoroutine(ProducingResource());
+        }
+
+        private IEnumerator ProducingResource()
+        {
+            IsFed = false;
+            IsProducing = true;
+            for (var i = 0; i < TimeToCollect; i++)
             {
-                _isFed = false;
-                yield return null;
-            }  
+                ProduceBar.fillAmount = i / TimeToCollect;
+                yield return new WaitForSeconds(1f);
+            }
+            ProduceBar.fillAmount = 1;
+            ReadyToCollect = true;
+            IsProducing = false;
+            yield return null;
         }
 
-        public void Feed()
+        public void ReloadProduce()
         {
-            _isFed = true;
+            IsFed = true;
+            ReadyToCollect = false;
+            StartProduce();
+        }
+
+        public void CantFeed()
+        {
+            ReadyToCollect = false;
         }
 
     }

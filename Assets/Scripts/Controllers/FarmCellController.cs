@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using LittleFarmGame.Models;
-
+using LittleFarmGame.UI;
 
 namespace LittleFarmGame.Controllers
 {
@@ -24,23 +24,31 @@ namespace LittleFarmGame.Controllers
 
         public void Initialization()
         {
-            foreach (var cell in Map.InstantiatedFarmCells)
-            {
-                var farmCell = cell.GetComponent<FarmCell>();
-                farmCell.FarmCellInteraction += ShowFarmCellUI;
-                farmCell.FarmInteraction += ShowFarmUI;
-            }
+            
         }
 
-        private void ShowFarmCellUI(FarmCell farmCell)
-        {
-            Debug.Log("ShowFarmCellUI");
-        }
+        //private void ShowFarmCellUI(FarmCell farmCell)
+        //{
 
-        private void ShowFarmUI(Farm farmCell)
-        {
-            Debug.Log("ShowFarmUI");
-        }
+         
+
+
+        //    //TODO
+        //    Debug.Log("ShowFarmCellUI");
+        //}
+
+        //private void ShowFarmUI(Farm farmCell)
+        //{
+        //    farmCell.IsFed = true;
+        //    //TODO
+        //    // var farm = farmCell.FarmItem;
+        //    // var farm1 = farm.GetComponent<Farm>();
+        //    //farm1.ImagePlace;
+        //    //var rectPalce = SceneManager.FarmCellUI.GetComponent<RectTransform>();
+        //    //rectPalce.SetParent(farmCell.ImagePlace);
+        //    //SceneManager.FarmCellUI.GetComponent<FarmCellUI>().SwitchOn();
+        //    Debug.Log("ShowFarmUI");
+        //}
 
         #endregion
 
