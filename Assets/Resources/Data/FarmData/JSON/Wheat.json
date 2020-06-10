@@ -1,0 +1,12 @@
+{
+    "Id": 3,
+    "ResourceName": "Пшеница",
+    "BuyPrice": 10,
+    "SellPrice": 5,
+    "FarmType": 3,
+    "EatType": 0,
+    "ProduceType": 3,
+    "TimeToCollect": 10.0,
+    "CountProductsByOneFeed": 1,
+    "CollectWeight": 1
+}

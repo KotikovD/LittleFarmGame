@@ -40,7 +40,10 @@ namespace LittleFarmGame
         public static string GameMenuUIPath = "Models/UI/GameMenuUI";
 
         //JSON
+        public static string JsonFarmDataPath = Path.Combine("Resources/Data", FarmDataFolder, "JSON");
         public static string JsonFarmResourceDataPath = Path.Combine("Resources/Data", FarmResourceDataFolder, "JSON");
+        public static string JsonPlayerSavesNewGame = "Resources/Data/PlayerSaves/NewGame.json";
+        public static string JsonPlayerSavesResumeGame = "Resources/Data/PlayerSaves/ResumeGame.json";
 
         // UI text
         public static string Menu = "MENU";

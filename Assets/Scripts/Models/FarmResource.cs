@@ -22,11 +22,5 @@ namespace LittleFarmGame.Models
             _cellImage = Image;
         }
 
-
-        public void CollectResource()
-        {
-            //TODO
-        }
-
     }
 }

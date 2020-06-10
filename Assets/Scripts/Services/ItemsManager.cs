@@ -60,7 +60,7 @@ namespace LittleFarmGame.Models
                 }
                 else
                 {
-                    SaveDataController.FarmResourceSave(data, true);
+                    SaveDataController.SaveItem(data, true);
                     var newFarmRes = new FarmResource(data);
                     FarmResources.Add(data.ResourceType, newFarmRes);
                 }
@@ -69,26 +69,8 @@ namespace LittleFarmGame.Models
             }
         }
 
-        //public static GameObject GetFarm(FarmType farmType)
-        //{
-        //    var farmPrefub = GameResourcesPresenter.FarmPrefub;
-
-        //    foreach (var farm in Farms)
-        //    {
-        //        if (farmType == farm.Key)
-        //        {
-        //            var newGameObject = Instantiate(farmPrefub, SceneManager.FarmItemsParent) as GameObject;
-        //            var newFarm = newGameObject.GetComponent<Farm>();
-        //            Debug.Log(farm.Value.BuyPrice);
-        //            newFarm.SetFarm(farm.Value); // не работает, кажется TODO
-        //            var newFarmImage = newGameObject.GetComponentInChildren<Image>();
-        //            newFarmImage.sprite = farm.Value.Image;
-        //            return newGameObject;
-        //        }
-        //    }
-        //    return null;
-        //}
-
         #endregion
+
+
     }
 }

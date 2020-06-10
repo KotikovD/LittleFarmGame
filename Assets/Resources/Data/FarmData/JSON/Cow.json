@@ -1,0 +1,12 @@
+{
+    "Id": 2,
+    "ResourceName": "Корова",
+    "BuyPrice": 20,
+    "SellPrice": 15,
+    "FarmType": 1,
+    "EatType": 3,
+    "ProduceType": 1,
+    "TimeToCollect": 20.0,
+    "CountProductsByOneFeed": 1,
+    "CollectWeight": 1
+}

@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.IO;
+using LittleFarmGame.Controllers;
+using UnityEngine;
 
 
 namespace LittleFarmGame.Models
@@ -9,23 +11,48 @@ namespace LittleFarmGame.Models
 
         #region Fields
 
+        [Header("Check for ignore fileds below and use JSON data files")]
+        public bool LoadFromJSON = false;
+        public string JsonDataPath;
+
+        [Header("To create/replace JSON, needs: check this, fill fileds and start Play mode")]
+        [SerializeField] private bool _createNewJSON = false;
+        [Space]
+
         [Header("Farm Data")]
-        //Item
         public int Id;
         public string ResourceName;
         public Sprite Image;
         public int BuyPrice;
-        public int SellPrice;
-
-        //Farm
+       [HideInInspector] public int SellPrice; //Ability for improve, not use yet
         public FarmType FarmType;
         public ResourceType EatType;
         public ResourceType ProduceType;
+        [Tooltip("Time between collects the resource")]
         public float TimeToCollect;
+        [Range(1,10), Tooltip("TimeToCollect multiplier. Set how many times player can collect resource by one feed")]
+        public int CountProductsByOneFeed;
         public int CollectWeight;
 
         #endregion
 
+
+        #region UnityMethods
+
+        private void OnEnable()
+        {
+            var _jsonFileName = FarmType + ".json";
+
+#if UNITY_ANDROID && !UNITY_EDITOR 
+            _jsonDataPath = Path.Combine(Application.persistentDataPath, StringManager.JsonFarmDataPath, _jsonFileName);
+#else
+            JsonDataPath = Path.Combine(Application.dataPath, StringManager.JsonFarmDataPath, _jsonFileName);
+            if (_createNewJSON)
+                SaveDataController.SaveItem(this, true);
+#endif
+        }
+
+        #endregion
 
     }
 }

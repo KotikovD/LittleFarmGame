@@ -13,9 +13,21 @@ namespace LittleFarmGame.Controllers
 
         #region Methods
 
-        public static void FarmResourceSave(FarmResourceData data, bool prettyPrint = false)
+        public static void SaveGame()
+        {
+
+        }
+
+        public static void SaveItem(FarmResourceData data, bool prettyPrint = false)
         {
             var FileDataJSON = new FarmResourceJSON(data);
+            var dataJSON = JsonUtility.ToJson(FileDataJSON, prettyPrint);
+            File.WriteAllText(data.JsonDataPath, dataJSON);
+        }
+
+        public static void SaveItem(FarmData data, bool prettyPrint = false)
+        {
+            var FileDataJSON = new FarmJSON(data);
             var dataJSON = JsonUtility.ToJson(FileDataJSON, prettyPrint);
             File.WriteAllText(data.JsonDataPath, dataJSON);
         }
@@ -33,15 +45,11 @@ namespace LittleFarmGame.Controllers
                 return null;
         }
 
+       
 
-        private void CreateSerilizableFile(FarmResourceData data)
-        {
-            
-
-        }
 
         #endregion
-        
+
 
     }
 }

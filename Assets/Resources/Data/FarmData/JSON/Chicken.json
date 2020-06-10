@@ -1,0 +1,12 @@
+{
+    "Id": 1,
+    "ResourceName": "Курица",
+    "BuyPrice": 15,
+    "SellPrice": 10,
+    "FarmType": 2,
+    "EatType": 3,
+    "ProduceType": 2,
+    "TimeToCollect": 3.0,
+    "CountProductsByOneFeed": 3,
+    "CollectWeight": 1
+}

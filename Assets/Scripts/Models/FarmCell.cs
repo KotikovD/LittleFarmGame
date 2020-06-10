@@ -78,6 +78,7 @@ namespace LittleFarmGame.Models
                     if (_farmItemData.ReadyToCollect)
                     {
                         CollectResource?.Invoke(_farmItemData);
+                        _farmItemData.ReadyToCollect = false;
                     }
 
                     if (!_farmItemData.IsProducing && !_farmItemData.IsFed)

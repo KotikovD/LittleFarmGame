@@ -11,28 +11,26 @@ namespace LittleFarmGame.Models
 
         #region Fields
 
-        //UseJSON
         [Header("Check for ignore fileds below and use JSON data files")]
         public bool LoadFromJSON = false;
         public string JsonDataPath;
 
         [Header("To create/replace JSON, needs: check this, fill fileds and start Play mode")]
-        [SerializeField] private bool CreateNewJSON = false;
+        [SerializeField] private bool _createNewJSON = false;
         [Space]
 
-        //Item
         public int Id;
         public string ResourceName;
         public Sprite Image;
         public int BuyPrice;
         public int SellPrice;
-
-        //FarmResource
         public ResourceType ResourceType;
         public float FeedWeight;
 
         #endregion
 
+
+        #region PrivateData
 
         public FarmResourceData(FarmResourceJSON data)
         {
@@ -44,6 +42,10 @@ namespace LittleFarmGame.Models
             FeedWeight = data.FeedWeight;
         }
 
+        #endregion
+
+
+        #region UnityMethods
 
         private void OnEnable()
         {
@@ -52,12 +54,13 @@ namespace LittleFarmGame.Models
 #if UNITY_ANDROID && !UNITY_EDITOR 
             _jsonDataPath = Path.Combine(Application.persistentDataPath, StringManager.JsonFarmResourceDataPath, _jsonFileName);
 #else
-            JsonDataPath = Path.Combine(Application.dataPath, StringManager.JsonFarmResourceDataPath, _jsonFileName);
+            JsonDataPath = Path.Combine(Application.dataPath, StringManager.JsonFarmDataPath, _jsonFileName);
+            if (_createNewJSON)
+                SaveDataController.SaveItem(this, true);
 #endif
-            if (CreateNewJSON)
-                SaveDataController.FarmResourceSave(this, true);
-
         }
+
+        #endregion
 
 
     }

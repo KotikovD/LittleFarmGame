@@ -12,12 +12,13 @@ namespace LittleFarmGame.Controllers
         public string ResourceName;
         public int BuyPrice;
         public int SellPrice;
-
-        //FarmResource
         public ResourceType ResourceType;
         public float FeedWeight;
 
         #endregion
+
+
+        #region PrivateData
 
         public FarmResourceJSON (FarmResourceData data)
         {
@@ -28,5 +29,9 @@ namespace LittleFarmGame.Controllers
             ResourceType = data.ResourceType;
             FeedWeight = data.FeedWeight;
         }
+
+        #endregion
+
+
     }
 }
