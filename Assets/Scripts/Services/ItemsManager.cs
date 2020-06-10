@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using LittleFarmGame.Controllers;
 using UnityEngine;
 
 
@@ -13,7 +14,7 @@ namespace LittleFarmGame.Models
         public static Dictionary<ResourceType, FarmResource> FarmResources = new Dictionary<ResourceType, FarmResource>();
         public static Dictionary<FarmType, Farm> Farms = new Dictionary<FarmType, Farm>();
 
-       // private static GameObject ItemsManagerParent = new GameObject { name = StringManager.ItemsManagerName };
+        // private static GameObject ItemsManagerParent = new GameObject { name = StringManager.ItemsManagerName };
 
         #endregion
 
@@ -43,8 +44,28 @@ namespace LittleFarmGame.Models
 
             foreach (var data in farmResourceDataArray)
             {
-                var newFarmRes = new FarmResource(data);
-                FarmResources.Add(data.ResourceType, newFarmRes);
+
+                if (data.LoadFromJSON)
+                {
+                    FarmResource newFarmRes;
+                    var newFarmResData = SaveDataController.FarmResourceLoad(data.JsonDataPath);
+                    if (newFarmResData != null)
+                    {
+                        newFarmResData.Image = data.Image;
+                        newFarmRes = new FarmResource(newFarmResData);
+                    }
+                    else
+                        newFarmRes = new FarmResource(data);
+                    FarmResources.Add(data.ResourceType, newFarmRes);
+                }
+                else
+                {
+                    SaveDataController.FarmResourceSave(data, true);
+                    var newFarmRes = new FarmResource(data);
+                    FarmResources.Add(data.ResourceType, newFarmRes);
+                }
+
+
             }
         }
 

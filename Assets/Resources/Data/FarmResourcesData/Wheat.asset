@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0e9ba7e54aa3498684c157c89597802, type: 3}
   m_Name: Wheat
   m_EditorClassIdentifier: 
+  LoadFromJSON: 1
+  JsonDataPath: /Users/dmitrykotikov/Yandex.Disk.localized/My Projects/Little Farm
+    Game/LittleFarmGame/Assets/Resources/Data/FarmResourcesData/JSON/Wheat.json
   Id: 3
   ResourceName: "\u041F\u0448\u0435\u043D\u0438\u0446\u0430"
   Image: {fileID: 21300000, guid: 7617ba776d5344c55aa02b7699550bdd, type: 3}

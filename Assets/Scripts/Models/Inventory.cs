@@ -45,7 +45,6 @@ namespace LittleFarmGame.Models
                 foreach (var playerData in DataPalyerInventory)
                     if (itemData.ResourceType == playerData.Key)
                         itemData.PlayerCollected = playerData.Value;
-
                 CreateInventoryCell(itemData);
             }
 
@@ -54,6 +53,16 @@ namespace LittleFarmGame.Models
                 CreateInventoryCell(item.Value);
             }
         }
+
+        /// <summary>
+        /// Send counts resources and coins data to JSON TODO
+        /// </summary>
+        private void SaveInventoryData()
+        {
+
+        }
+
+       
 
         private void CreateInventoryCell<T>(T value) where T : class
         {

@@ -1,4 +1,7 @@
-﻿namespace LittleFarmGame
+﻿using System.IO;
+
+
+namespace LittleFarmGame
 {
     /// <summary>
     /// Names, pathes, messages and other string keeper
@@ -25,8 +28,6 @@
         public static string FarmResourceDataPath = "Data/" + FarmResourceDataFolder;
 
         //Farm
-       // public static string FarmName = "Farm";
-       // public static string FarmPath = "Models/Items/" + FarmName;
         public static string FarmDataFolder = "FarmData";
         public static string FarmDataPath = "Data/" + FarmDataFolder;
 
@@ -37,6 +38,9 @@
         public static string GameBarUIPath = "Models/UI/GameBarUI";
         public static string FarmCellUIPath = "Models/UI/FarmCellUI";
         public static string GameMenuUIPath = "Models/UI/GameMenuUI";
+
+        //JSON
+        public static string JsonFarmResourceDataPath = Path.Combine("Resources/Data", FarmResourceDataFolder, "JSON");
 
         // UI text
         public static string Menu = "MENU";

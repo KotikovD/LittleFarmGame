@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0e9ba7e54aa3498684c157c89597802, type: 3}
   m_Name: Egg
   m_EditorClassIdentifier: 
+  LoadFromJSON: 1
+  JsonDataPath: /Users/dmitrykotikov/Yandex.Disk.localized/My Projects/Little Farm
+    Game/LittleFarmGame/Assets/Resources/Data/FarmResourcesData/JSON/Egg.json
   Id: 1
   ResourceName: "\u042F\u0439\u0446\u043E"
   Image: {fileID: 21300000, guid: 922bfacd1dba34d378d707b1b8e26d4d, type: 3}

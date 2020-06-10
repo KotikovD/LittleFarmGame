@@ -1,0 +1,8 @@
+{
+    "Id": 3,
+    "ResourceName": "Пшеница",
+    "BuyPrice": 10,
+    "SellPrice": 10,
+    "ResourceType": 3,
+    "FeedWeight": 1.0
+}

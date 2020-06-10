@@ -1,0 +1,8 @@
+{
+    "Id": 2,
+    "ResourceName": "Молоко",
+    "BuyPrice": 10,
+    "SellPrice": 5,
+    "ResourceType": 1,
+    "FeedWeight": 1.0
+}

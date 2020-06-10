@@ -1,0 +1,8 @@
+{
+    "Id": 1,
+    "ResourceName": "Яйцо",
+    "BuyPrice": 15,
+    "SellPrice": 10,
+    "ResourceType": 2,
+    "FeedWeight": 1.0
+}
