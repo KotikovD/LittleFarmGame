@@ -14,7 +14,7 @@ namespace LittleFarmGame.Controllers
         public MapController MapController;
         public FarmCellController FarmCellController;
         public InventoryController InventoryController;
-
+        public SaveDataController SaveDataController;
         #endregion
 
 
@@ -24,8 +24,12 @@ namespace LittleFarmGame.Controllers
         {
             GameResourcesPresenter.InitializeResources();
             SceneManager.BuildScene();
+
+            SaveDataController = new SaveDataController();
+            SaveDataController.Initialization();
+
             ItemsManager.BuildItemsPool();
-            
+
             MapController = new MapController();
             MapController.Initialization();
 

@@ -18,21 +18,13 @@ namespace LittleFarmGame.Controllers
                 {
                     FarmCell fc;
 
-                    if (x == 2  && z == 2)
+
+                    if (x <= 1 || z <= 1 || x >= 6 || z >= 6)
                     {
-                        fc = new FarmCell(false, true, x, z, FarmType.Cow, cellBuyPrice);
-                    }
-                    else if (x == 2 && z == 5)
-                    {
-                        fc = new FarmCell(false, true, x, z, FarmType.Chicken, cellBuyPrice);
-                    }
-                    else if (x == 4 && z == 4)
-                    {
-                        fc = new FarmCell(false, true, x, z, FarmType.Wheat, cellBuyPrice);
-                    }
-                    else if (x <= 1 || z <= 1 || x >= 6 || z >= 6)
-                    {
-                        fc = new FarmCell(false, false, x, z, FarmType.None, cellBuyPrice);
+                        if (x == 0 || z == 0 || x == 7 || z == 7)
+                            fc = new FarmCell(false, false, x, z, FarmType.None, cellBuyPrice * 2);
+                        else
+                            fc = new FarmCell(false, false, x, z, FarmType.None, cellBuyPrice);
                     }
                     else
                     {
@@ -41,7 +33,7 @@ namespace LittleFarmGame.Controllers
 
                     _farmCells.Add(fc);
 
-                    
+
                 }
 
             }

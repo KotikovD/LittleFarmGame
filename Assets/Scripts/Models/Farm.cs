@@ -54,16 +54,12 @@ namespace LittleFarmGame.Models
 
         public void StartProduce()
         {
-
             if (!IsFed) return;
-
-            StopCoroutine(ProducingResource());
             StartCoroutine(ProducingResource());
         }
 
         private IEnumerator ProducingResource()
         {
-
             IsProducing = true;
             for (var z = 0; z < CountProductsByOneFeed; z++)
             {
@@ -79,7 +75,7 @@ namespace LittleFarmGame.Models
             }
             IsProducing = false;
             IsFed = false;
-            yield return null;
+            StopCoroutine(ProducingResource());
         }
 
         public void ReloadProduce()

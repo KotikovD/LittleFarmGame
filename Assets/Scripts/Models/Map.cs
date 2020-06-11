@@ -40,6 +40,37 @@ namespace LittleFarmGame.Models
             InstantiatedFarmCells.Add(cellObj.GetComponent<FarmCell>());
         }
 
+        public void ActiveChoseModeOnCells(int buyPrice, FarmType farmType)
+        {
+            if (!SceneManager.PlayerInventory.CorrectCoins(buyPrice * -1, true))
+                return;
+            SetChoseModeOnCells(true, buyPrice, farmType);
+        }
+
+        public void SetChoseModeOnCells()
+        {
+            SetChoseModeOnCells(false);
+        }
+
+        public void SetChoseModeOnCells(bool setValue, int buyPrice = 0, FarmType farmType = FarmType.None)
+        {
+            foreach (var cell in InstantiatedFarmCells)
+            {
+                if (cell.IsBought && !cell.IsBusy)
+                {
+                    cell.ActiveWaitingToChoose(setValue, buyPrice, farmType);
+                    if (setValue)
+                        cell.IAmTheChosen += SetChoseModeOnCells;
+                    else
+                    {
+                        cell.IAmTheChosen -= SetChoseModeOnCells;
+                        
+                    }
+                        
+                }
+            }
+        }
+
         private Vector3 PlaceMapToCenter(List<FarmCell> farmCells)
         {
             float maxX = 0f;

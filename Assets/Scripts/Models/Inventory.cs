@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using LittleFarmGame.Controllers;
 using LittleFarmGame.UI;
 
 
@@ -13,31 +14,40 @@ namespace LittleFarmGame.Models
 
         public event Action<int> CoinsHasChanged;
         public event Action<string> ImpossibleAction;
+        public event Action ShouldSave;
 
-        private Dictionary<ResourceType, InventoryCellUI> _iventoryResourceCells = new Dictionary<ResourceType, InventoryCellUI>();
-        private Dictionary<ResourceType, int> _palyerInventory = new Dictionary<ResourceType, int>();
+        private Dictionary<ResourceType, InventoryCellUI> _iventoryResourceCells;
+        private Dictionary<ResourceType, int> _palyerInventory;
         private int _coins;
 
-        
+
         #endregion
+
+
+        #region Properties
 
         public int Coins { get => _coins; }
         public Dictionary<ResourceType, int> GetInventory { get => _palyerInventory; }
 
+        #endregion
+
+
         #region Methods
 
-        public void BuildInventory(Dictionary<ResourceType, int> DataPalyerInventory, int coins)
+        public void BuildInventory(Dictionary<ResourceType, int> dataPalyerInventory, int coins)
         {
-            _palyerInventory = DataPalyerInventory;
+            _palyerInventory = new Dictionary<ResourceType, int>();
+            _iventoryResourceCells = new Dictionary<ResourceType, InventoryCellUI>();
+
             SetCoins(coins);
 
             foreach (var item in ItemsManager.FarmResources)
             {
                 var itemData = item.Value;
+                if (dataPalyerInventory.ContainsKey(item.Key))
+                    itemData.PlayerCollected = dataPalyerInventory[item.Key];
 
-                foreach (var playerData in DataPalyerInventory)
-                    if (itemData.ResourceType == playerData.Key)
-                        itemData.PlayerCollected = playerData.Value;
+                _palyerInventory.Add(itemData.ResourceType, itemData.PlayerCollected);
                 CreateInventoryCell(itemData);
             }
 
@@ -46,16 +56,6 @@ namespace LittleFarmGame.Models
                 CreateInventoryCell(item.Value);
             }
         }
-
-        /// <summary>
-        /// Send counts resources and coins data to JSON TODO
-        /// </summary>
-        private void SaveInventoryData()
-        {
-
-        }
-
-       
 
         private void CreateInventoryCell<T>(T value) where T : class
         {
@@ -73,16 +73,11 @@ namespace LittleFarmGame.Models
             {
                 var valueData = value as Farm;
                 newCell.SetData(valueData);
-                newCell.BuyButton.onClick.AddListener(() => ActiveChoseModeOnCells(valueData.BuyPrice, valueData.FarmType));
+                newCell.BuyButton.onClick.AddListener(() => SceneManager.Map.ActiveChoseModeOnCells(valueData.BuyPrice, valueData.FarmType));
             }
         }
 
-        private void SetCoins(int value)
-        {
-            _coins = value;
-            CoinsHasChanged?.Invoke(_coins);
-        }
-
+        
         public void CorrectCoins(int value)
         {
             CorrectCoins(value, false);
@@ -94,10 +89,7 @@ namespace LittleFarmGame.Models
             if (newCoins >= 0)
             {
                 if (!justCheck)
-                {
-                    _coins = newCoins;
-                    CoinsHasChanged?.Invoke(_coins);
-                }
+                    SetCoins(newCoins);
                 return true;
             }
             else
@@ -107,10 +99,17 @@ namespace LittleFarmGame.Models
             }
         }
 
-        public void CorrectInvenoryItem(ResourceType type, int value)
+        private void SetCoins(int value)
+        {
+            _coins = value;
+            CoinsHasChanged?.Invoke(_coins);
+        }
+
+        public void CorrectCountInventoryItem(ResourceType type, int value)
         {
             if (type == ResourceType.None) return;
             _palyerInventory[type] += value;
+            ShouldSave?.Invoke();
         }
 
         private void SellFarmResource(InventoryCellUI inventoryCell)
@@ -123,6 +122,7 @@ namespace LittleFarmGame.Models
                 currentCount -= 1;
                 _palyerInventory[inventoryCell.ResourceType] = currentCount;
                 inventoryCell.CurrentCount.text = currentCount.ToString();
+                ShouldSave?.Invoke();
             }
         }
 
@@ -133,13 +133,17 @@ namespace LittleFarmGame.Models
             {
                 var currentCount = _palyerInventory[inventoryCell.ResourceType] += 1;
                 inventoryCell.CurrentCount.text = currentCount.ToString();
+                ShouldSave?.Invoke();
             }
         }
 
         public void BuyCell(FarmCell farmCell)
         {
             if (CorrectCoins(farmCell.CellBuyPrice * -1, false))
+            {
                 farmCell.BuyThisCell();
+                ShouldSave?.Invoke();
+            }      
         }
 
         public void SpendFarmResource(Farm farmData)
@@ -156,6 +160,7 @@ namespace LittleFarmGame.Models
                     farmData.ReloadProduce();
                     farmRes = _palyerInventory[farmData.EatType] -= 1;
                     _iventoryResourceCells[farmData.EatType].CurrentCount.text = farmRes.ToString();
+                    ShouldSave?.Invoke();
                 }
                 else
                 {
@@ -169,36 +174,9 @@ namespace LittleFarmGame.Models
         {
             var farmRes = _palyerInventory[farmData.ProduceType] += farmData.CollectWeight;
             _iventoryResourceCells[farmData.ProduceType].CurrentCount.text = farmRes.ToString();
+            ShouldSave?.Invoke();
         }
 
-
-        //убрать эти три метода из инвенторя  TODO
-        public void ActiveChoseModeOnCells(int buyPrice, FarmType farmType)
-        {
-            if (!CorrectCoins(buyPrice * -1, true)) return;
-            SetChoseModeOnCells(true, buyPrice, farmType);
-
-        }
-
-        public void SetChoseModeOnCells()
-        {
-            SetChoseModeOnCells(false);
-        }
-
-        public void SetChoseModeOnCells(bool setValue, int buyPrice = 0, FarmType farmType = FarmType.None)
-        {
-            foreach (var cell in Map.InstantiatedFarmCells)
-            {
-                if (cell.IsBought && !cell.IsBusy)
-                {
-                    cell.ActiveWaitingToChoose(setValue, buyPrice, farmType);
-                    if (setValue)
-                        cell.IAmTheChosen += SetChoseModeOnCells;
-                    else
-                        cell.IAmTheChosen -= SetChoseModeOnCells;
-                }
-            }
-        }
 
         #endregion
 
