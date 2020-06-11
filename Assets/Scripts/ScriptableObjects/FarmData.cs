@@ -37,6 +37,25 @@ namespace LittleFarmGame.Models
         #endregion
 
 
+        #region PrivateData
+
+        public FarmData(FarmJSON data)
+        {
+            Id = data.Id;
+            ResourceName = data.ResourceName;
+            BuyPrice = data.BuyPrice;
+            SellPrice = data.SellPrice;
+            FarmType = data.FarmType;
+            EatType = data.EatType;
+            ProduceType = data.ProduceType;
+            TimeToCollect = data.TimeToCollect;
+            CountProductsByOneFeed = data.CountProductsByOneFeed;
+            CollectWeight = data.CollectWeight;
+        }
+
+        #endregion
+
+
         #region UnityMethods
 
         private void OnEnable()

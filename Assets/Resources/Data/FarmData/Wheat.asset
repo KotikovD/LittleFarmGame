@@ -12,6 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fd64690ef11b497f8b4cb62fd0b3972, type: 3}
   m_Name: Wheat
   m_EditorClassIdentifier: 
+  LoadFromJSON: 0
+  JsonDataPath: /Users/dmitrykotikov/Yandex.Disk.localized/My Projects/Little Farm
+    Game/LittleFarmGame/Assets/Resources/Data/FarmData/JSON/Wheat.json
+  _createNewJSON: 1
   Id: 3
   ResourceName: "\u041F\u0448\u0435\u043D\u0438\u0446\u0430"
   Image: {fileID: 21300000, guid: 7617ba776d5344c55aa02b7699550bdd, type: 3}
@@ -21,5 +25,5 @@ MonoBehaviour:
   EatType: 0
   ProduceType: 3
   TimeToCollect: 10
-  CollectWeight: 2
-  TimeReserveEveryFeed: 0
+  CountProductsByOneFeed: 1
+  CollectWeight: 1

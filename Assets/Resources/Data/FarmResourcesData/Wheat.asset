@@ -14,11 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LoadFromJSON: 1
   JsonDataPath: /Users/dmitrykotikov/Yandex.Disk.localized/My Projects/Little Farm
-    Game/LittleFarmGame/Assets/Resources/Data/FarmResourcesData/JSON/Wheat.json
+    Game/LittleFarmGame/Assets/Resources/Data/FarmData/JSON/Wheat.json
+  _createNewJSON: 0
   Id: 3
   ResourceName: "\u041F\u0448\u0435\u043D\u0438\u0446\u0430"
   Image: {fileID: 21300000, guid: 7617ba776d5344c55aa02b7699550bdd, type: 3}
   BuyPrice: 10
-  SellPrice: 5
+  SellPrice: 10
   ResourceType: 3
   FeedWeight: 1

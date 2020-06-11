@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
+using LittleFarmGame.Controllers;
 
 namespace LittleFarmGame.UI
 {
@@ -11,28 +13,22 @@ namespace LittleFarmGame.UI
 
         #region Fields
 
-        //[Header("Example"), Tooltip("Example")]
-        //[HiddenInInspector]
-        //[SerializeField]
-        //[SPACE]
+        [SerializeField] private Button _newGame;
+        [SerializeField] private Button _loadGame;
+        [SerializeField] private Button _rusame;
 
         #endregion
-
-
-        #region Properties
-
-        //
-
-        #endregion
-
 
 
         #region Methods
 
         private void Awake()
         {
+            //TODO text from manager
+          //  _newGame.onClick.AddListener(() => SaveDataController.SaveGame());
             SwitchOff();
         }
+
 
         public void SwitchActiveGameMenu()
         {

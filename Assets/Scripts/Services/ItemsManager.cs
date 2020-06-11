@@ -33,8 +33,24 @@ namespace LittleFarmGame.Models
 
             foreach (var data in farmDataArray)
             {
-                Farm newFarm = new Farm(data);
-                Farms.Add(data.FarmType, newFarm);
+                if (data.LoadFromJSON)
+                {
+                    Farm newFarm;
+                    var newFarmData = SaveDataController.FarmLoad(data.JsonDataPath);
+                    if (newFarmData != null)
+                    {
+                        newFarmData.Image = data.Image;
+                        newFarm = new Farm(newFarmData);
+                    }
+                    else
+                        newFarm = new Farm(data);
+                    Farms.Add(data.FarmType, newFarm);
+                }
+                else
+                {
+                    var newFarm = new Farm(data);
+                    Farms.Add(data.FarmType, newFarm);
+                }
             }
         }
 
@@ -60,12 +76,9 @@ namespace LittleFarmGame.Models
                 }
                 else
                 {
-                    SaveDataController.SaveItem(data, true);
                     var newFarmRes = new FarmResource(data);
                     FarmResources.Add(data.ResourceType, newFarmRes);
                 }
-
-
             }
         }
 

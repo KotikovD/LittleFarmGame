@@ -15,21 +15,14 @@ namespace LittleFarmGame.Models
         public event Action<string> ImpossibleAction;
 
         private Dictionary<ResourceType, InventoryCellUI> _iventoryResourceCells = new Dictionary<ResourceType, InventoryCellUI>();
-
-        /// <summary>
-        /// Keeps player saves data resources and count of each. Serilizable.
-        /// </summary>
         private Dictionary<ResourceType, int> _palyerInventory = new Dictionary<ResourceType, int>();
-        /// <summary>
-        /// Keeps player saves data coins count. Serilizable.
-        /// </summary>
         private int _coins;
 
-
-
+        
         #endregion
 
         public int Coins { get => _coins; }
+        public Dictionary<ResourceType, int> GetInventory { get => _palyerInventory; }
 
         #region Methods
 

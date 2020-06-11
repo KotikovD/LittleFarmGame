@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LoadFromJSON: 1
   JsonDataPath: /Users/dmitrykotikov/Yandex.Disk.localized/My Projects/Little Farm
-    Game/LittleFarmGame/Assets/Resources/Data/FarmResourcesData/JSON/Egg.json
+    Game/LittleFarmGame/Assets/Resources/Data/FarmData/JSON/Egg.json
+  _createNewJSON: 0
   Id: 1
   ResourceName: "\u042F\u0439\u0446\u043E"
   Image: {fileID: 21300000, guid: 922bfacd1dba34d378d707b1b8e26d4d, type: 3}

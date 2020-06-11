@@ -12,14 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fd64690ef11b497f8b4cb62fd0b3972, type: 3}
   m_Name: Chicken
   m_EditorClassIdentifier: 
+  LoadFromJSON: 0
+  JsonDataPath: /Users/dmitrykotikov/Yandex.Disk.localized/My Projects/Little Farm
+    Game/LittleFarmGame/Assets/Resources/Data/FarmData/JSON/Chicken.json
+  _createNewJSON: 1
   Id: 1
   ResourceName: "\u041A\u0443\u0440\u0438\u0446\u0430"
   Image: {fileID: 21300000, guid: b69e929f8082d4393bd9fbdef74d4785, type: 3}
   BuyPrice: 15
-  SellPrice: 7
+  SellPrice: 10
   FarmType: 2
   EatType: 3
   ProduceType: 2
-  TimeToCollect: 10
+  TimeToCollect: 3
+  CountProductsByOneFeed: 3
   CollectWeight: 1
-  TimeReserveEveryFeed: 10

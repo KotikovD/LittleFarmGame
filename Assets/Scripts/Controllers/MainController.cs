@@ -29,14 +29,23 @@ namespace LittleFarmGame.Controllers
             MapController = new MapController();
             MapController.Initialization();
 
-            FarmCellController = new FarmCellController();
-            FarmCellController.Initialization();
+            //FarmCellController = new FarmCellController();
+            //FarmCellController.Initialization();
 
             InventoryController = new InventoryController();
             InventoryController.Initialization();
 
             SceneManager.BuildUI();
 
+        }
+
+        private void Update()
+        {
+            if (Input.GetKey(KeyCode.S))
+                SaveDataController.SaveGame();
+
+            if (Input.GetKey(KeyCode.L))
+                SaveDataController.LoadGame();
         }
 
         #endregion

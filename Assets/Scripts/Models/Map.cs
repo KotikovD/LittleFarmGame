@@ -33,13 +33,6 @@ namespace LittleFarmGame.Models
         {
             var newCell = GameResourcesPresenter.CellPrefub;
             newCell.SetFarmCell(farmCell);
-            //newCell.IsBought = farmCell.IsBought;
-            //newCell.IsBusy = farmCell.IsBusy;
-            //newCell.MapPositionX = farmCell.MapPositionX;
-            //newCell.MapPositionZ = farmCell.MapPositionZ;
-            //newCell.FarmItemType = farmCell.FarmItemType;
-            //newCell.CellBuyPrice = farmCell.CellBuyPrice;
-
             var position = new Vector3(farmCell.MapPositionX, 0, farmCell.MapPositionZ);
             var cellObj = Instantiate(newCell.gameObject, position, Quaternion.identity) as GameObject;
             cellObj.transform.SetParent(transform);

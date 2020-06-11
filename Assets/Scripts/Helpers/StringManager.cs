@@ -1,5 +1,5 @@
 ﻿using System.IO;
-
+using UnityEngine;
 
 namespace LittleFarmGame
 {
@@ -42,8 +42,13 @@ namespace LittleFarmGame
         //JSON
         public static string JsonFarmDataPath = Path.Combine("Resources/Data", FarmDataFolder, "JSON");
         public static string JsonFarmResourceDataPath = Path.Combine("Resources/Data", FarmResourceDataFolder, "JSON");
-        public static string JsonPlayerSavesNewGame = "Resources/Data/PlayerSaves/NewGame.json";
-        public static string JsonPlayerSavesResumeGame = "Resources/Data/PlayerSaves/ResumeGame.json";
+#if UNITY_ANDROID && !UNITY_EDITOR
+        public static string JsonPlayerSavesNewGame = Path.Combine(Application.persistentDataPath, "Resources/Data/PlayerSaves/NewGame.json");
+        public static string JsonPlayerSavesResumeGame = Path.Combine(Application.persistentDataPath, "Resources/Data/PlayerSaves/ResumeGame.json");
+#else
+        public static string JsonPlayerSavesNewGame = Path.Combine(Application.dataPath, "Resources/Data/PlayerSaves/NewGame.json");
+        public static string JsonPlayerSavesResumeGame = Path.Combine(Application.dataPath, "Resources/Data/PlayerSaves/ResumeGame.json");
+#endif
 
         // UI text
         public static string Menu = "MENU";
