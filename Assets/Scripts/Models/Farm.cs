@@ -1,14 +1,15 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
 
 
 namespace LittleFarmGame.Models
 {
     public sealed class Farm : Item
     {
-        private const int ANIMATION_SMOOTH = 20;
+        #region Fileds
+
+        private const int ANIMATION_SMOOTH = 30;
 
         public bool IsFed;
         public bool ReadyToCollect;
@@ -21,6 +22,10 @@ namespace LittleFarmGame.Models
         public FarmType FarmType;
         public int CountProductsByOneFeed;
 
+        #endregion
+
+
+        #region PrivateData
 
         public Farm(FarmData data)
         {
@@ -35,6 +40,11 @@ namespace LittleFarmGame.Models
             CollectWeight = data.CollectWeight;
             CountProductsByOneFeed = data.CountProductsByOneFeed;
         }
+
+        #endregion
+
+
+        #region Methods
 
         public void SetFarmData(Farm data)
         {
@@ -89,6 +99,9 @@ namespace LittleFarmGame.Models
         {
             ReadyToCollect = false;
         }
+
+        #endregion
+
 
     }
 }

@@ -10,6 +10,7 @@ namespace LittleFarmGame.Models
         #region Fields
 
         [HideInInspector] public string Name;
+        [HideInInspector] public int Id;
 
         #endregion
 

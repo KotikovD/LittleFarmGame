@@ -7,5 +7,4 @@
         Egg,
         Wheat
     }
-
 }

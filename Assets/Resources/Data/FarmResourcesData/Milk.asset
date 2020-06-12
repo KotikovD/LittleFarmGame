@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LoadFromJSON: 1
   JsonDataPath: /Users/dmitrykotikov/Yandex.Disk.localized/My Projects/Little Farm
-    Game/LittleFarmGame/Assets/Resources/Data/FarmData/JSON/Milk.json
+    Game/LittleFarmGame/Assets/Resources/Data/FarmResourcesData/JSON/Milk.json
   _createNewJSON: 0
   Id: 2
   ResourceName: "\u041C\u043E\u043B\u043E\u043A\u043E"

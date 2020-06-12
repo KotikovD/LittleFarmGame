@@ -6,8 +6,11 @@ namespace LittleFarmGame
     /// <summary>
     /// Names, pathes, messages and other string keeper
     /// </summary>
-    public static class StringManager
+    public static class StringKeeper
     {
+
+
+        #region Fileds
 
         //Main game objects
         public static string CanvasName = "Canvas";
@@ -51,10 +54,18 @@ namespace LittleFarmGame
 #endif
 
         // UI text
-        public static string Menu = "MENU";
-        public static string CantBuy = "Недостаточно монеток";
-        public static string NeedMoreResource = "Нужно больше корма";
-        public static string SellButton = "SELL";
-        public static string BuyButton = "BUY";
+        public static string Menu = "МЕНЮ";
+        public static string ResumeButtonText = "Продолжить";
+        public static string NewGameButtonText = "Новая игра";
+        public static string ExitGameButtonText = "Выход";
+        public static string SellButton = "ПРОДАТЬ";
+        public static string BuyButton = "КУПИТЬ";
+
+        public static string CantBuyAlert = "Недостаточно монеток";
+        public static string NeedMoreResourceAlert= "Нужно больше корма";
+
+        #endregion
+
+
     }
 }

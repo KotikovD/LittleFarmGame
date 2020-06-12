@@ -6,9 +6,9 @@ using UnityEngine.UI;
 namespace LittleFarmGame.Models
 {
     /// <summary>
-    /// Build scene objects and keep references
+    /// Add some objects to scene and keep references
     /// </summary>
-    public class SceneManager : MonoBehaviour
+    public class GameSceneManager : MonoBehaviour
     {
 
         #region Fileds
@@ -21,35 +21,33 @@ namespace LittleFarmGame.Models
         public static GameBarUI GameBarUI;
         public static GameObject MessageUI;
         public static GameObject FarmCellUI;
-        public static GameMenuUI GameMenuUI;
 
         #endregion
 
 
         #region SaticMethods
 
-        public static void BuildScene()
+        public static void AddScene()
         {
-            var map = new GameObject { name = StringManager.MapName };
+            var map = new GameObject { name = StringKeeper.MapName };
             Map = map.AddComponent<Map>();
 
-            var farmItemsParent = new GameObject { name = StringManager.FarmItemsParentName };
+            var farmItemsParent = new GameObject { name = StringKeeper.FarmItemsParentName };
             farmItemsParent.transform.SetParent(map.transform);
             FarmItemsParent = farmItemsParent.transform;
 
             PlayerInventory = GameObject.FindObjectOfType<Inventory>();
             InventoryContent = PlayerInventory.transform.GetComponentInChildren<GridLayoutGroup>().transform;
 
-            Canvas = GameObject.Find(StringManager.CanvasName);
+            Canvas = GameObject.Find(StringKeeper.CanvasName);
             
         }
 
-        public static void BuildUI()
+        public static void AddUI()
         {
-            GameMenuUI = Instantiate(GameResourcesPresenter.GameMenuUI);
-            MessageUI = Instantiate(GameResourcesPresenter.MessageUI, SceneManager.Canvas.transform);
-            GameBarUI = Instantiate(GameResourcesPresenter.GameBarUI, SceneManager.Canvas.transform);
-            FarmCellUI = Instantiate(GameResourcesPresenter.FarmCellUI, SceneManager.Canvas.transform);
+            MessageUI = Instantiate(GameResourcesPresenter.MessageUI, GameSceneManager.Canvas.transform);
+            GameBarUI = Instantiate(GameResourcesPresenter.GameBarUI, GameSceneManager.Canvas.transform);
+            FarmCellUI = Instantiate(GameResourcesPresenter.FarmCellUI, GameSceneManager.Canvas.transform);
         }
 
         #endregion

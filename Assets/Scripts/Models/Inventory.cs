@@ -6,7 +6,7 @@ using LittleFarmGame.UI;
 
 namespace LittleFarmGame.Models
 {
-    public sealed class Inventory : BaseObjectScene
+    public sealed class Inventory : BaseObjectScene, IShouldSave
     {
 
 
@@ -34,14 +34,17 @@ namespace LittleFarmGame.Models
 
         #region Methods
 
-        public void BuildInventory(Dictionary<ResourceType, int> dataPalyerInventory, int coins)
+        public void FillInventory()
         {
+            var dataPalyerInventory = ServiceLocator.Resolve<SaveDataController>().InventoryData;
+            var coins = ServiceLocator.Resolve<SaveDataController>().CoinsData;
+
             _palyerInventory = new Dictionary<ResourceType, int>();
             _iventoryResourceCells = new Dictionary<ResourceType, InventoryCellUI>();
 
             SetCoins(coins);
 
-            foreach (var item in ItemsManager.FarmResources)
+            foreach (var item in ServiceLocator.Resolve<ItemsManager>().FarmResources)
             {
                 var itemData = item.Value;
                 if (dataPalyerInventory.ContainsKey(item.Key))
@@ -51,7 +54,7 @@ namespace LittleFarmGame.Models
                 CreateInventoryCell(itemData);
             }
 
-            foreach (var item in ItemsManager.Farms)
+            foreach (var item in ServiceLocator.Resolve<ItemsManager>().Farms)
             {
                 CreateInventoryCell(item.Value);
             }
@@ -59,7 +62,7 @@ namespace LittleFarmGame.Models
 
         private void CreateInventoryCell<T>(T value) where T : class
         {
-            var newCell = Instantiate(GameResourcesPresenter.InventoryCellUI, SceneManager.InventoryContent);
+            var newCell = Instantiate(GameResourcesPresenter.InventoryCellUI, GameSceneManager.InventoryContent);
 
             if (value.GetType().Equals(typeof(FarmResource)))
             {
@@ -73,11 +76,10 @@ namespace LittleFarmGame.Models
             {
                 var valueData = value as Farm;
                 newCell.SetData(valueData);
-                newCell.BuyButton.onClick.AddListener(() => SceneManager.Map.ActiveChoseModeOnCells(valueData.BuyPrice, valueData.FarmType));
+                newCell.BuyButton.onClick.AddListener(() => GameSceneManager.Map.ActiveChoseModeOnCells(valueData.BuyPrice, valueData.FarmType));
             }
         }
 
-        
         public void CorrectCoins(int value)
         {
             CorrectCoins(value, false);
@@ -94,7 +96,7 @@ namespace LittleFarmGame.Models
             }
             else
             {
-                ImpossibleAction?.Invoke(StringManager.CantBuy);
+                ImpossibleAction?.Invoke(StringKeeper.CantBuyAlert);
                 return false;
             }
         }
@@ -114,7 +116,7 @@ namespace LittleFarmGame.Models
 
         private void SellFarmResource(InventoryCellUI inventoryCell)
         {
-            var farmRes = ItemsManager.FarmResources[inventoryCell.ResourceType];
+            var farmRes = ServiceLocator.Resolve<ItemsManager>().FarmResources[inventoryCell.ResourceType];
             var currentCount = _palyerInventory[inventoryCell.ResourceType];
             if (currentCount > 0)
             {
@@ -128,7 +130,7 @@ namespace LittleFarmGame.Models
 
         private void BuyFarmResource(InventoryCellUI inventoryCell)
         {
-            var farmRes = ItemsManager.FarmResources[inventoryCell.ResourceType];
+            var farmRes = ServiceLocator.Resolve<ItemsManager>().FarmResources[inventoryCell.ResourceType];
             if (CorrectCoins(farmRes.BuyPrice * -1, false))
             {
                 var currentCount = _palyerInventory[inventoryCell.ResourceType] += 1;
@@ -165,7 +167,7 @@ namespace LittleFarmGame.Models
                 else
                 {
                     farmData.CantFeed();
-                    ImpossibleAction?.Invoke(StringManager.NeedMoreResource);
+                    ImpossibleAction?.Invoke(StringKeeper.NeedMoreResourceAlert);
                 }
             }
         }
@@ -176,7 +178,6 @@ namespace LittleFarmGame.Models
             _iventoryResourceCells[farmData.ProduceType].CurrentCount.text = farmRes.ToString();
             ShouldSave?.Invoke();
         }
-
 
         #endregion
 

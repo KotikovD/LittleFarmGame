@@ -5,29 +5,33 @@ using UnityEngine;
 
 namespace LittleFarmGame.Models
 {
+    /// <summary>
+    /// Build all items (Farm and FramResource) and keep references
+    /// </summary>
     public class ItemsManager : MonoBehaviour
     {
 
 
         #region Fileds
 
-        public static Dictionary<ResourceType, FarmResource> FarmResources = new Dictionary<ResourceType, FarmResource>();
-        public static Dictionary<FarmType, Farm> Farms = new Dictionary<FarmType, Farm>();
-
-        // private static GameObject ItemsManagerParent = new GameObject { name = StringManager.ItemsManagerName };
+        public Dictionary<ResourceType, FarmResource> FarmResources;
+        public Dictionary<FarmType, Farm> Farms;
 
         #endregion
 
 
         #region Methods
 
-        public static void BuildItemsPool()
+        public void BuildItemsPools()
         {
-            BuildFarmResourcesDictionary();
-            BuildFarm();
+            FarmResources = new Dictionary<ResourceType, FarmResource>();
+            Farms = new Dictionary<FarmType, Farm>();
+
+            BuildFarmResources();
+            BuildFarms();
         }
 
-        private static void BuildFarm()
+        private void BuildFarms()
         {
             var farmDataArray = GameResourcesPresenter.FarmDataArray;
 
@@ -36,7 +40,7 @@ namespace LittleFarmGame.Models
                 if (data.LoadFromJSON)
                 {
                     Farm newFarm;
-                    var newFarmData = SaveDataController.FarmLoad(data.JsonDataPath);
+                    var newFarmData = ServiceLocator.Resolve<SaveDataController>().FarmLoad(data.JsonDataPath);
                     if (newFarmData != null)
                     {
                         newFarmData.Image = data.Image;
@@ -54,7 +58,7 @@ namespace LittleFarmGame.Models
             }
         }
 
-        private static void BuildFarmResourcesDictionary()
+        private void BuildFarmResources()
         {
             var farmResourceDataArray = GameResourcesPresenter.FarmResourceDataArray;
 
@@ -64,7 +68,7 @@ namespace LittleFarmGame.Models
                 if (data.LoadFromJSON)
                 {
                     FarmResource newFarmRes;
-                    var newFarmResData = SaveDataController.FarmResourceLoad(data.JsonDataPath);
+                    var newFarmResData = ServiceLocator.Resolve<SaveDataController>().FarmResourceLoad(data.JsonDataPath);
                     if (newFarmResData != null)
                     {
                         newFarmResData.Image = data.Image;

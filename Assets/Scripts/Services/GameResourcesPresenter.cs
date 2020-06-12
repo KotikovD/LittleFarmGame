@@ -27,15 +27,15 @@ namespace LittleFarmGame.Models
 
         public static void InitializeResources()
         {
-            CellPrefub = Resources.Load<FarmCell>(StringManager.FarmCellPath);
-            FarmResourceDataArray = Resources.LoadAll<FarmResourceData>(StringManager.FarmResourceDataPath);
-            FarmDataArray = Resources.LoadAll<FarmData>(StringManager.FarmDataPath);
-            MessageUI = Resources.Load<GameObject>(StringManager.MessageUIPath);
-            InventoryUI = Resources.Load<GameObject>(StringManager.InventoryUIPath);
-            InventoryCellUI = Resources.Load<InventoryCellUI>(StringManager.InventoryCellUIPath);
-            GameBarUI = Resources.Load<GameBarUI>(StringManager.GameBarUIPath);
-            FarmCellUI = Resources.Load<GameObject>(StringManager.FarmCellUIPath);
-            GameMenuUI = Resources.Load<GameMenuUI>(StringManager.GameMenuUIPath);
+            CellPrefub = Resources.Load<FarmCell>(StringKeeper.FarmCellPath);
+            FarmResourceDataArray = Resources.LoadAll<FarmResourceData>(StringKeeper.FarmResourceDataPath);
+            FarmDataArray = Resources.LoadAll<FarmData>(StringKeeper.FarmDataPath);
+            MessageUI = Resources.Load<GameObject>(StringKeeper.MessageUIPath);
+            InventoryUI = Resources.Load<GameObject>(StringKeeper.InventoryUIPath);
+            InventoryCellUI = Resources.Load<InventoryCellUI>(StringKeeper.InventoryCellUIPath);
+            GameBarUI = Resources.Load<GameBarUI>(StringKeeper.GameBarUIPath);
+            FarmCellUI = Resources.Load<GameObject>(StringKeeper.FarmCellUIPath);
+            GameMenuUI = Resources.Load<GameMenuUI>(StringKeeper.GameMenuUIPath);
         }
 
         #endregion

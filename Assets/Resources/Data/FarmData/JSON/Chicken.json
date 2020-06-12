@@ -6,7 +6,7 @@
     "FarmType": 2,
     "EatType": 3,
     "ProduceType": 2,
-    "TimeToCollect": 3.0,
+    "TimeToCollect": 10.0,
     "CountProductsByOneFeed": 3,
     "CollectWeight": 1
 }

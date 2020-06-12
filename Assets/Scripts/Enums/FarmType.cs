@@ -7,5 +7,4 @@
         Chicken,
         Wheat
     }
-
 }

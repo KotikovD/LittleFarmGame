@@ -36,8 +36,8 @@ namespace LittleFarmGame.UI
             ItemName.text = valueData.Name;
             ItemIcon.sprite = valueData.Image;
             CurrentCount.text = valueData.PlayerCollected.ToString();
-            BuyButtonText.text = string.Concat("-", valueData.BuyPrice, Environment.NewLine, StringManager.BuyButton);
-            SellButtonText.text = string.Concat("+", valueData.SellPrice, Environment.NewLine, StringManager.SellButton);
+            BuyButtonText.text = string.Concat("-", valueData.BuyPrice, Environment.NewLine, StringKeeper.BuyButton);
+            SellButtonText.text = string.Concat("+", valueData.SellPrice, Environment.NewLine, StringKeeper.SellButton);
             SellButton.gameObject.SetActive(true);
             CurrentCount.gameObject.SetActive(true);
             BuyButton.onClick.AddListener(() => SellItem?.Invoke(this));
@@ -49,7 +49,7 @@ namespace LittleFarmGame.UI
             ItemName.text = valueData.Name;
             FarmType = valueData.FarmType;
             ItemIcon.sprite = valueData.Image;
-            BuyButtonText.text = string.Concat("-", valueData.BuyPrice, Environment.NewLine, StringManager.BuyButton);
+            BuyButtonText.text = string.Concat("-", valueData.BuyPrice, Environment.NewLine, StringKeeper.BuyButton);
             SellButton.gameObject.SetActive(false);
             CurrentCount.gameObject.SetActive(false);
             BuyButton.onClick.AddListener(() => BuyItem?.Invoke(this));

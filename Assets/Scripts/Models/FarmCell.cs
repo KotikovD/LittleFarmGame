@@ -7,33 +7,43 @@ using LittleFarmGame.UI;
 
 namespace LittleFarmGame.Models
 {
-    public sealed class FarmCell : BaseObjectScene, IPointerDownHandler
+    public sealed class FarmCell : BaseObjectScene, IPointerDownHandler, IShouldSave
     {
+
+        #region Fileds
 
         [HideInInspector] public event Action<Farm> CollectResource;
         [HideInInspector] public event Action<Farm> TryToFeed;
         [HideInInspector] public event Action<FarmCell> TryToBuyCell;
         [HideInInspector] public event Action<int> BuyNewFarm;
         [HideInInspector] public event Action IAmTheChosen;
+        [HideInInspector] public event Action ShouldSave;
+        [HideInInspector] public event Action<FarmCell> SerilaizeThisCell;
 
         [HideInInspector] public FarmType FarmItemType;
-        [HideInInspector] public bool IsBusy = false;
-        [HideInInspector] public bool IsBought = false;
+        [HideInInspector] public bool IsBusy;
+        [HideInInspector] public bool IsBought;
         [HideInInspector] public int MapPositionX;
         [HideInInspector] public int MapPositionZ;
+        [HideInInspector] public int CellBuyPrice;
 
-        public int CellBuyPrice;
-        private Farm _farmItemData;
         [SerializeField] private FarmCellUI _farmCellUI;
         [SerializeField] private Image _cellLookImage;
         [SerializeField] private Color _cellIsNotBought;
         [SerializeField] private Color _cellIsBought;
-        private FarmType _possibleFarmType = FarmType.None;
+        private Farm _farmItemData;
+        private FarmType _possibleFarmType;
         private int _possibleBuyPrice;
         private bool _isWaitingChoose = false;
 
-        public FarmCell(bool isBusy, bool isBought, int mapPositionX, int mapPositionZ, FarmType farmItem, int cellBuyPrice)
+        #endregion
+
+
+        #region PrivateData
+
+        public FarmCell(int id, bool isBusy, bool isBought, int mapPositionX, int mapPositionZ, FarmType farmItem, int cellBuyPrice)
         {
+            Id = id;
             IsBusy = isBusy;
             IsBought = isBought;
             MapPositionX = mapPositionX;
@@ -42,15 +52,10 @@ namespace LittleFarmGame.Models
             CellBuyPrice = cellBuyPrice;
         }
 
-        public void SetFarmCell(FarmCell data)
-        {
-            IsBusy = data.IsBusy;
-            IsBought = data.IsBought;
-            MapPositionX = data.MapPositionX;
-            MapPositionZ = data.MapPositionZ;
-            FarmItemType = data.FarmItemType;
-            CellBuyPrice = data.CellBuyPrice;
-        }
+        #endregion
+
+
+        #region UnityMethods
 
         private void Awake()
         {
@@ -66,8 +71,13 @@ namespace LittleFarmGame.Models
             _cellLookImage.color = IsBought == true ? _cellIsBought : _cellIsNotBought;
 
             if (!IsBought)
-                TryToBuyCell += SceneManager.PlayerInventory.BuyCell;
+                TryToBuyCell += GameSceneManager.PlayerInventory.BuyCell;
         }
+
+        #endregion
+
+
+        #region Methods
 
         public void OnPointerDown(PointerEventData eventData)
         {
@@ -103,7 +113,6 @@ namespace LittleFarmGame.Models
 
         public void AddFarmItem(FarmType farmItem)
         {
-            if (IsBusy) return;
             if (_isWaitingChoose)
                 ActiveWaitingToChoose(false, 0 , FarmType.None);
 
@@ -111,17 +120,19 @@ namespace LittleFarmGame.Models
             IsBusy = true;
 
             _farmItemData = gameObject.AddComponent<Farm>();
-            _farmItemData.SetFarmData(ItemsManager.Farms[farmItem]);
-
+            _farmItemData.SetFarmData(ServiceLocator.Resolve<ItemsManager>().Farms[farmItem]);
             _farmCellUI.FarmItemImage.sprite = _farmItemData.Image;
             _farmItemData.ProduceBar = _farmCellUI.ProduceBar;
             _farmCellUI.FarmItemImage.gameObject.SetActive(true);
 
-            TryToFeed += SceneManager.PlayerInventory.SpendFarmResource;
-            CollectResource += SceneManager.PlayerInventory.CollectFarmResource;
+            TryToFeed += GameSceneManager.PlayerInventory.SpendFarmResource;
+            CollectResource += GameSceneManager.PlayerInventory.CollectFarmResource;
             _farmItemData.StartProduce();
+            SerilaizeThisCell?.Invoke(this);
+              ShouldSave?.Invoke();
         }
 
+        //Dont use yet, ability for improve
         public void RemoveFarmItem()
         {
             if (!IsBusy) return;
@@ -129,8 +140,10 @@ namespace LittleFarmGame.Models
             IsBusy = false;
             _farmCellUI.FarmItemImage.gameObject.SetActive(false);
             Destroy(_farmCellUI.FarmItemImage.sprite);
-            TryToFeed -= SceneManager.PlayerInventory.SpendFarmResource;
-            CollectResource -= SceneManager.PlayerInventory.CollectFarmResource;
+            TryToFeed -= GameSceneManager.PlayerInventory.SpendFarmResource;
+            CollectResource -= GameSceneManager.PlayerInventory.CollectFarmResource;
+            SerilaizeThisCell?.Invoke(this);
+            ShouldSave?.Invoke();
         }
 
         public void BuyThisCell()
@@ -139,6 +152,8 @@ namespace LittleFarmGame.Models
             _cellLookImage.color = _cellIsBought;
             _farmCellUI.SwitchEpmtyCellUI();
             _farmCellUI.BuyCellButton.onClick.RemoveAllListeners();
+            SerilaizeThisCell?.Invoke(this);
+            ShouldSave?.Invoke();
         }
 
         public void ActiveWaitingToChoose(bool value, int buyPrice, FarmType farmType)
@@ -148,10 +163,24 @@ namespace LittleFarmGame.Models
             _isWaitingChoose = value;
             _farmCellUI.SwitchBigArrow(value);
             if (value)
-                BuyNewFarm += SceneManager.PlayerInventory.CorrectCoins;
+                BuyNewFarm += GameSceneManager.PlayerInventory.CorrectCoins;
             else
-                BuyNewFarm -= SceneManager.PlayerInventory.CorrectCoins;
+                BuyNewFarm -= GameSceneManager.PlayerInventory.CorrectCoins;
         }
+
+        public void SetFarmCellData(FarmCell data)
+        {
+            Id = data.Id;
+            IsBusy = data.IsBusy;
+            IsBought = data.IsBought;
+            MapPositionX = data.MapPositionX;
+            MapPositionZ = data.MapPositionZ;
+            FarmItemType = data.FarmItemType;
+            CellBuyPrice = data.CellBuyPrice;
+        }
+
+        #endregion
+
 
     }
 }

@@ -7,42 +7,38 @@ namespace LittleFarmGame.Models
     public sealed class Map : BaseObjectScene
     {
 
+        #region Fileds
 
-        #region Fields
+        /// <summary>
+        /// int = Id, FarmCell = FarmCell on the map
+        /// </summary>
+        private Dictionary<int, FarmCell> _instantiatedFarmCells = new Dictionary<int, FarmCell>();
 
-        public static List<FarmCell> InstantiatedFarmCells = new List<FarmCell>();
+        #endregion
 
-        private List<FarmCell> _farmCellsData;
+
+        #region Properties
+
+        public Dictionary<int, FarmCell> FarmCells { get => _instantiatedFarmCells; }
 
         #endregion
 
 
         #region Methods
 
-        public void FillMap(List<FarmCell> farmCells)
-        {
-            _farmCellsData = farmCells;
-
-            foreach (var farmCell in _farmCellsData)
-                FillCell(farmCell);
-
-            transform.position = PlaceMapToCenter(_farmCellsData);
-        }
-
-        private void FillCell(FarmCell farmCell)
+        public void FillCell(FarmCell farmCell)
         {
             var newCell = GameResourcesPresenter.CellPrefub;
-            newCell.SetFarmCell(farmCell);
+            newCell.SetFarmCellData(farmCell);
             var position = new Vector3(farmCell.MapPositionX, 0, farmCell.MapPositionZ);
-            var cellObj = Instantiate(newCell.gameObject, position, Quaternion.identity) as GameObject;
-            cellObj.transform.SetParent(transform);
-            
-            InstantiatedFarmCells.Add(cellObj.GetComponent<FarmCell>());
+            var cellObj = Instantiate(newCell.gameObject, position, Quaternion.identity, transform);
+            var instanuiedCell = cellObj.GetComponent<FarmCell>();
+            _instantiatedFarmCells.Add(farmCell.Id, instanuiedCell);
         }
 
         public void ActiveChoseModeOnCells(int buyPrice, FarmType farmType)
         {
-            if (!SceneManager.PlayerInventory.CorrectCoins(buyPrice * -1, true))
+            if (!GameSceneManager.PlayerInventory.CorrectCoins(buyPrice * -1, true))
                 return;
             SetChoseModeOnCells(true, buyPrice, farmType);
         }
@@ -54,36 +50,24 @@ namespace LittleFarmGame.Models
 
         public void SetChoseModeOnCells(bool setValue, int buyPrice = 0, FarmType farmType = FarmType.None)
         {
-            foreach (var cell in InstantiatedFarmCells)
+            foreach (var cell in _instantiatedFarmCells)
             {
-                if (cell.IsBought && !cell.IsBusy)
+                if (cell.Value.IsBought && !cell.Value.IsBusy)
                 {
-                    cell.ActiveWaitingToChoose(setValue, buyPrice, farmType);
+                    cell.Value.ActiveWaitingToChoose(setValue, buyPrice, farmType);
                     if (setValue)
-                        cell.IAmTheChosen += SetChoseModeOnCells;
+                        cell.Value.IAmTheChosen += SetChoseModeOnCells;
                     else
                     {
-                        cell.IAmTheChosen -= SetChoseModeOnCells;
-                        
+                        cell.Value.IAmTheChosen -= SetChoseModeOnCells;
                     }
-                        
                 }
             }
         }
 
-        private Vector3 PlaceMapToCenter(List<FarmCell> farmCells)
+        public void UpdateCell(FarmCell farmCell)
         {
-            float maxX = 0f;
-            float maxZ = 0f;
-
-            foreach (var farmCell in farmCells)
-            {
-                if (farmCell.MapPositionX > maxX) maxX = farmCell.MapPositionX;
-                if (farmCell.MapPositionX > maxZ) maxZ = farmCell.MapPositionZ;
-            }
-
-            var newPosition = new Vector3(maxX / 2, 0f, maxZ / 2) * -1;
-            return newPosition;
+            _instantiatedFarmCells[farmCell.Id] = farmCell;
         }
 
         #endregion

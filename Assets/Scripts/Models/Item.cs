@@ -9,6 +9,6 @@ namespace LittleFarmGame.Models
         public int SellPrice;
         public int BuyPrice;
         public Sprite Image;
-
+        
     }
 }

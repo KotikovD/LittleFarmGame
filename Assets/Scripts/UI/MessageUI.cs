@@ -18,15 +18,19 @@ namespace LittleFarmGame.UI
         #endregion
 
 
-        #region Methods
+        #region UnityMethods
 
         private void Awake()
         {
             _messageText = GetComponentInChildren<TextMeshProUGUI>();
-            SceneManager.PlayerInventory.ImpossibleAction += ShowMessage;
+            GameSceneManager.PlayerInventory.ImpossibleAction += ShowMessage;
             SwitchOff();
         }
 
+        #endregion
+
+
+        #region Methods
 
         public void ShowMessage(string messageText)
         {

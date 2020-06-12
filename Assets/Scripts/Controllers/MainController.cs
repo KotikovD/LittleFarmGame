@@ -4,55 +4,41 @@ using LittleFarmGame.Models;
 
 namespace LittleFarmGame.Controllers
 {
-
     public class MainController : MonoBehaviour
     {
-
-
-        #region Fields
-
-        public MapController MapController;
-        public FarmCellController FarmCellController;
-        public InventoryController InventoryController;
-        public SaveDataController SaveDataController;
-        #endregion
 
 
         #region UnityMethods
 
         private void Start()
         {
+            ServiceLocator.SetService(new SaveDataController());
+            ServiceLocator.SetService(new ItemsManager());
+            ServiceLocator.SetService(new MapBuilder());
+
             GameResourcesPresenter.InitializeResources();
-            SceneManager.BuildScene();
-
-            SaveDataController = new SaveDataController();
-            SaveDataController.Initialization();
-
-            ItemsManager.BuildItemsPool();
-
-            MapController = new MapController();
-            MapController.Initialization();
-
-            //FarmCellController = new FarmCellController();
-            //FarmCellController.Initialization();
-
-            InventoryController = new InventoryController();
-            InventoryController.Initialization();
-
-            SceneManager.BuildUI();
-
+            GameSceneManager.AddScene();
+            ServiceLocator.Resolve<SaveDataController>().Initialization();
+            ServiceLocator.Resolve<SaveDataController>().LoadGameData(SetNewOrRusameGame());
+            ServiceLocator.Resolve<ItemsManager>().BuildItemsPools();
+            ServiceLocator.Resolve<MapBuilder>().BuildMap();
+            GameSceneManager.PlayerInventory.FillInventory();
+            GameSceneManager.AddUI();
         }
 
-        private void Update()
+        private bool SetNewOrRusameGame()
         {
-            if (Input.GetKey(KeyCode.S))
-                SaveDataController.SaveGame();
-
-            if (Input.GetKey(KeyCode.L))
-                SaveDataController.LoadGame();
+            if (PlayerPrefs.HasKey("NewGame"))
+            {
+                var value = PlayerPrefs.GetInt("NewGame");
+                return value == 1 ? true : false;
+            }
+            else
+                return true;
         }
 
         #endregion
+
 
     }
 }

@@ -7,21 +7,29 @@ using System.Collections.Generic;
 
 namespace LittleFarmGame.Controllers
 {
-    public class SaveDataController : BaseController, IInitialization
+    public class SaveDataController : IInitialization
     {
+
+        #region Fileds
+
+        public int CoinsData { get; private set; }
+        public Dictionary<ResourceType, int> InventoryData { get; private set; }
+        public Dictionary<int, FarmCell> FarmCellsData { get; private set; }
+        
+        #endregion
 
 
         #region Methods
 
         public void Initialization()
         {
-            SceneManager.PlayerInventory.ShouldSave += SaveGame;
+            GameSceneManager.PlayerInventory.ShouldSave += SaveGame;
         }
 
         public void SaveGame()
         {
             var inventoryData = new JSON();
-            foreach (var item in SceneManager.PlayerInventory.GetInventory)
+            foreach (var item in GameSceneManager.PlayerInventory.GetInventory)
             {
                 if (item.Value == 0) continue;
                 var jArray = new JArray();
@@ -30,72 +38,73 @@ namespace LittleFarmGame.Controllers
                 inventoryData.Add(item.Key.ToString(), jArray);
             }
 
-            var farmCells = Map.InstantiatedFarmCells;
+            var farmCells = GameSceneManager.Map.FarmCells;
             var farmCellsData = new JSON();
-            for (var i = 0; i < farmCells.Count; i++)
+            foreach (var farmCell in farmCells)
             {
                 var jArray = new JArray();
-                jArray.Add(farmCells[i].IsBusy);
-                jArray.Add(farmCells[i].IsBought);
-                jArray.Add(farmCells[i].MapPositionX);
-                jArray.Add(farmCells[i].MapPositionZ);
-                jArray.Add((int)farmCells[i].FarmItemType);
-                jArray.Add(farmCells[i].CellBuyPrice);
-
-                farmCellsData.Add(i.ToString(), jArray);
+                jArray.Add(farmCell.Value.Id);
+                jArray.Add(farmCell.Value.IsBusy);
+                jArray.Add(farmCell.Value.IsBought);
+                jArray.Add(farmCell.Value.MapPositionX);
+                jArray.Add(farmCell.Value.MapPositionZ);
+                jArray.Add((int)farmCell.Value.FarmItemType);
+                jArray.Add(farmCell.Value.CellBuyPrice);
+                farmCellsData.Add(farmCell.Value.Id.ToString(), jArray);
             }
 
             var playerSavesData = new JSON();
-            playerSavesData.Add("coins", SceneManager.PlayerInventory.Coins);
+            playerSavesData.Add("coins", GameSceneManager.PlayerInventory.Coins);
             playerSavesData.Add("inventoryData", inventoryData);
             playerSavesData.Add("farmCellsData", farmCellsData);
             var jsonString = playerSavesData.CreatePrettyString();
-            File.WriteAllText(StringManager.JsonPlayerSavesResumeGame, jsonString);
+            File.WriteAllText(StringKeeper.JsonPlayerSavesResumeGame, jsonString);
         }
 
-        public void LoadGame(bool newGame = false)
+        public void LoadGameData(bool isNewGame)
         {
-            var jsonDataPath = StringManager.JsonPlayerSavesResumeGame;
-            if (File.Exists(jsonDataPath))
+            string jsonDataPath;
+            if (isNewGame)
+                jsonDataPath = StringKeeper.JsonPlayerSavesNewGame;
+            else
+                jsonDataPath = StringKeeper.JsonPlayerSavesResumeGame;
+
+            var data = File.ReadAllText(jsonDataPath);
+            var playerSavesData = JSON.ParseString(data);
+
+            CoinsData = playerSavesData.GetInt("coins");
+
+            var inventoryData = playerSavesData.GetJSON("inventoryData");
+            InventoryData = new Dictionary<ResourceType, int>();
+            foreach (var item in inventoryData.Keys)
             {
-                var data = File.ReadAllText(jsonDataPath);
-                var playerSavesData = JSON.ParseString(data);
-
-                var coins = playerSavesData.GetInt("coins");
-
-                var inventoryData = playerSavesData.GetJSON("inventoryData");
-                var inventory = new Dictionary<ResourceType, int>();
-                foreach (var item in inventoryData.Keys)
-                {
-                    var jArray = inventoryData.GetJArray(item);
-                    inventory.Add((ResourceType)jArray.GetInt(0), jArray.GetInt(1));
-                }
-
-                var farmCells = new List<FarmCell>();
-                var farmCellsData = playerSavesData.GetJSON("farmCellsData");
-                foreach (var item in farmCellsData.Keys)
-                {
-                    var jArray = farmCellsData.GetJArray(item);
-                    farmCells.Add(new FarmCell(
-                        jArray.GetBool(0),
-                        jArray.GetBool(1),
-                        jArray.GetInt(2),
-                        jArray.GetInt(3),
-                        (FarmType)jArray.GetInt(4),
-                        jArray.GetInt(5)
-                        ));
-                }
-
-                //TODO remove
-                Debug.Log("yes! " + coins);
-                foreach (var item in inventory)
-                {
-                    Debug.Log("type " + item.Key + " count " + item.Value);
-                }
-                foreach (var item in farmCells)
-                    Debug.Log("type " + item.MapPositionZ);
-
+                var jArray = inventoryData.GetJArray(item);
+                InventoryData.Add((ResourceType)jArray.GetInt(0), jArray.GetInt(1));
             }
+
+            FarmCellsData = new Dictionary<int, FarmCell>();
+            var farmCellsData = playerSavesData.GetJSON("farmCellsData");
+            foreach (var item in farmCellsData.Keys)
+            {
+                var jArray = farmCellsData.GetJArray(item);
+                FarmCellsData.Add(
+                    jArray.GetInt(0),
+                    new FarmCell(
+                    jArray.GetInt(0),
+                    jArray.GetBool(1),
+                    jArray.GetBool(2),
+                    jArray.GetInt(3),
+                    jArray.GetInt(4),
+                    (FarmType)jArray.GetInt(5),
+                    jArray.GetInt(6)
+                    ));
+            }
+        }
+
+        public bool CheckLoadAbility()
+        {
+            var jsonDataPath = StringKeeper.JsonPlayerSavesResumeGame;
+            return File.Exists(jsonDataPath);
         }
 
         public static void SaveItem(FarmResourceData data, bool prettyPrint = false)
@@ -112,7 +121,7 @@ namespace LittleFarmGame.Controllers
             File.WriteAllText(data.JsonDataPath, dataJSON);
         }
 
-        public static FarmResourceData FarmResourceLoad(string jsonDataPath)
+        public FarmResourceData FarmResourceLoad(string jsonDataPath)
         {
             if (File.Exists(jsonDataPath))
             {
@@ -125,7 +134,7 @@ namespace LittleFarmGame.Controllers
                 return null;
         }
 
-        public static FarmData FarmLoad(string jsonDataPath)
+        public FarmData FarmLoad(string jsonDataPath)
         {
             if (File.Exists(jsonDataPath))
             {

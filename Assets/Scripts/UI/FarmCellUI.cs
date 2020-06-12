@@ -29,7 +29,7 @@ namespace LittleFarmGame.UI
         public void SwitchEpmtyCellUI()
         {
             var enable = BuyCellButton.gameObject.activeSelf;
-            _buttonBuyText.text = string.Concat("-", BuyPrice, System.Environment.NewLine, StringManager.BuyButton);
+            _buttonBuyText.text = string.Concat("-", BuyPrice, System.Environment.NewLine, StringKeeper.BuyButton);
             BuyCellButton.gameObject.SetActive(!enable);
             if (!enable)
                 StartCoroutine(SwitchOff(BuyCellButton.gameObject));
