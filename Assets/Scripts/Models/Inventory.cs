@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using LittleFarmGame.Controllers;
 using LittleFarmGame.UI;
-
+using UnityEngine;
+using UnityEngine.UI;
 
 namespace LittleFarmGame.Models
 {
@@ -20,6 +21,7 @@ namespace LittleFarmGame.Models
         private Dictionary<ResourceType, int> _palyerInventory;
         private int _coins;
 
+        private GridLayoutGroup _gridLayoutGroup;
 
         #endregion
 

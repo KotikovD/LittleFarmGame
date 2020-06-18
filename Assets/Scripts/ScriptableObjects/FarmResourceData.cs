@@ -51,12 +51,15 @@ namespace LittleFarmGame.Models
         {
             var _jsonFileName = ResourceType.ToString() + ".json";
 
-#if UNITY_ANDROID && !UNITY_EDITOR 
-            _jsonDataPath = Path.Combine(Application.persistentDataPath, StringManager.JsonFarmResourceDataPath, _jsonFileName);
-#else
+#if UNITY_EDITOR 
+
             JsonDataPath = Path.Combine(Application.dataPath, StringKeeper.JsonFarmResourceDataPath, _jsonFileName);
             if (_createNewJSON)
                 SaveDataController.SaveItem(this, true);
+#endif
+
+#if UNITY_WEBGL
+            LoadFromJSON = false;
 #endif
         }
 

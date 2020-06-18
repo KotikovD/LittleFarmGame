@@ -15,7 +15,7 @@ namespace LittleFarmGame.Controllers
         public int CoinsData { get; private set; }
         public Dictionary<ResourceType, int> InventoryData { get; private set; }
         public Dictionary<int, FarmCell> FarmCellsData { get; private set; }
-        
+
         #endregion
 
 
@@ -23,24 +23,42 @@ namespace LittleFarmGame.Controllers
 
         public void Initialization()
         {
+
+#if !UNITY_WEBGL
+
             GameSceneManager.PlayerInventory.ShouldSave += SaveGame;
+
+#endif
+
         }
 
         public void SaveGame()
         {
-            var inventoryData = new JSON();
-            foreach (var item in GameSceneManager.PlayerInventory.GetInventory)
+#if !UNITY_WEBGL
+            SaveGame(null, null, 0);
+#endif
+        }
+
+        public void SaveGame(Dictionary<ResourceType, int> inventoryData = null, Dictionary<int, FarmCell> farmCellsData = null, int coinsData = 0)
+        {
+            var inventoryDataJson = new JSON();
+            if (inventoryData == null)
+                inventoryData = GameSceneManager.PlayerInventory.GetInventory;
+
+            foreach (var item in inventoryData)
             {
                 if (item.Value == 0) continue;
                 var jArray = new JArray();
                 jArray.Add((int)item.Key);
                 jArray.Add(item.Value);
-                inventoryData.Add(item.Key.ToString(), jArray);
+                inventoryDataJson.Add(item.Key.ToString(), jArray);
             }
 
-            var farmCells = GameSceneManager.Map.FarmCells;
-            var farmCellsData = new JSON();
-            foreach (var farmCell in farmCells)
+            var farmCellsDataJson = new JSON();
+            if (farmCellsData == null)
+                farmCellsData = GameSceneManager.Map.FarmCells;
+
+            foreach (var farmCell in farmCellsData)
             {
                 var jArray = new JArray();
                 jArray.Add(farmCell.Value.Id);
@@ -50,25 +68,38 @@ namespace LittleFarmGame.Controllers
                 jArray.Add(farmCell.Value.MapPositionZ);
                 jArray.Add((int)farmCell.Value.FarmItemType);
                 jArray.Add(farmCell.Value.CellBuyPrice);
-                farmCellsData.Add(farmCell.Value.Id.ToString(), jArray);
+                farmCellsDataJson.Add(farmCell.Value.Id.ToString(), jArray);
             }
 
+            if (coinsData == 0)
+                coinsData = GameSceneManager.PlayerInventory.Coins;
+
             var playerSavesData = new JSON();
-            playerSavesData.Add("coins", GameSceneManager.PlayerInventory.Coins);
-            playerSavesData.Add("inventoryData", inventoryData);
+            playerSavesData.Add("coins", coinsData);
+            playerSavesData.Add("inventoryData", inventoryDataJson);
             playerSavesData.Add("farmCellsData", farmCellsData);
             var jsonString = playerSavesData.CreatePrettyString();
+
             File.WriteAllText(StringKeeper.JsonPlayerSavesResumeGame, jsonString);
         }
 
         public void LoadGameData(bool isNewGame)
         {
+
+#if UNITY_WEBGL
+
+            var newGameData = new WebGLNewGame();
+            InventoryData = newGameData.GetGameInventoryData();
+            FarmCellsData = newGameData.GetGameFarmCellsData();
+            CoinsData = newGameData.GetGameCoinsData();
+
+#else
+
             string jsonDataPath;
             if (isNewGame)
                 jsonDataPath = StringKeeper.JsonPlayerSavesNewGame;
             else
                 jsonDataPath = StringKeeper.JsonPlayerSavesResumeGame;
-
             var data = File.ReadAllText(jsonDataPath);
             var playerSavesData = JSON.ParseString(data);
 
@@ -99,6 +130,9 @@ namespace LittleFarmGame.Controllers
                     jArray.GetInt(6)
                     ));
             }
+
+#endif
+
         }
 
         public bool CheckLoadAbility()
@@ -147,7 +181,7 @@ namespace LittleFarmGame.Controllers
                 return null;
         }
 
-        #endregion
+#endregion
 
 
     }

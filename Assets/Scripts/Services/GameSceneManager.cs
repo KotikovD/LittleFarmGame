@@ -37,7 +37,7 @@ namespace LittleFarmGame.Models
             FarmItemsParent = farmItemsParent.transform;
 
             PlayerInventory = GameObject.FindObjectOfType<Inventory>();
-            InventoryContent = PlayerInventory.transform.GetComponentInChildren<GridLayoutGroup>().transform;
+            InventoryContent = PlayerInventory.transform.GetComponentInChildren<HorizontalLayoutGroup>().transform;
 
             Canvas = GameObject.Find(StringKeeper.CanvasName);
             

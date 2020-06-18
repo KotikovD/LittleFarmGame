@@ -8,17 +8,22 @@ namespace LittleFarmGame.Controllers
     /// </summary>
     internal sealed class CameraController : MonoBehaviour
     {
+
+        #region Fileds
+
         private const float BOTTOM_BOUND = 8.3f;
-        private const float MIN_Z = -10.5f;
-        private const float MAX_Z = -5.5f;
-        private const float MIN_X = -9f;
-        private const float MAX_X = -5f;
+        private const float MIN_Y = -1.7f;
+        private const float MAX_Y = 0.5f;
+        private const float MIN_X = -3.1f;
+        private const float MAX_X = 3.1f;
 
-        private Vector2 _startPosition;
         [SerializeField] private Camera _camera;
-        [SerializeField] private int _dragAntiSpeed = 15;
-        [SerializeField] private int _smoothSpeed = 100;
+        private Vector2 _startPosition;
 
+        #endregion
+
+
+        #region UnityMethods
 
         private void Update()
         {
@@ -30,21 +35,19 @@ namespace LittleFarmGame.Controllers
             {
                 if (_startPosition.y > BOTTOM_BOUND)
                 {
-                    var positionZ = _camera.ScreenToWorldPoint(Input.mousePosition).y - _startPosition.y;
+                    var positionY = _camera.ScreenToWorldPoint(Input.mousePosition).y - _startPosition.y;
                     var positionX = _camera.ScreenToWorldPoint(Input.mousePosition).x - _startPosition.x;
-                    var desirePosition =
-                        new Vector3(Mathf.Clamp(transform.localPosition.x - positionX / _dragAntiSpeed, MIN_X, MAX_X),
-                        transform.localPosition.y,
-                        Mathf.Clamp(transform.localPosition.z - positionZ / _dragAntiSpeed, MIN_Z, MAX_Z));
 
-                    positionX = Mathf.Lerp(positionX, desirePosition.x, _smoothSpeed * Time.deltaTime);
-                    positionZ = Mathf.Lerp(positionZ, desirePosition.z, _smoothSpeed * Time.deltaTime);
+                    positionX = Mathf.Clamp(transform.localPosition.x - positionX, MIN_X, MAX_X);
+                    positionY = Mathf.Clamp(transform.localPosition.y - positionY, MIN_Y, MAX_Y);
 
-                    transform.localPosition = new Vector3(positionX, transform.localPosition.y, positionZ);
+                    transform.localPosition = new Vector3(positionX, positionY, transform.localPosition.z);
                 }
             }
-
         }
+
+        #endregion
+
 
     }
 }

@@ -30,21 +30,28 @@ namespace LittleFarmGame.UI
 
         private void Awake()
         {
+
             _newGameText.text = StringKeeper.NewGameButtonText;
             _rusameOrLoadText.text = StringKeeper.ResumeButtonText;
             _exitText.text = StringKeeper.ExitGameButtonText;
 
             _exitGame.onClick.AddListener(() => QuitGame());
-            _rusameOrLoad.onClick.AddListener(() => StartCoroutine(LoadNewGame(false)));
+
             _newGame.onClick.AddListener(() => StartCoroutine(LoadNewGame(true)));
+
+#if UNITY_WEBGL
+            _rusameOrLoad.gameObject.SetActive(false);
+#else
+            _rusameOrLoad.onClick.AddListener(() => StartCoroutine(LoadNewGame(false)));
+#endif
 
             _loadScreen.SetActive(false);
         }
 
-        #endregion
+#endregion
 
 
-        #region Method
+#region Method
 
        private IEnumerator LoadNewGame(bool isNewGame)
         {
@@ -64,7 +71,7 @@ namespace LittleFarmGame.UI
 #endif
         }
 
-        #endregion
+#endregion
 
 
     }
